@@ -5,73 +5,70 @@ import random
 
 
 
-
-
-
 pygame.init()
 
 
 # start of deck 
 
 
-C10 = pygame.image.load('PNG\\10C.PNG')
+C10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10C.PNG')
 C10 = pygame.transform.scale(C10,(150,150))
 
-D10 = pygame.image.load('PNG\\10D.PNG')
+D10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10D.PNG')
 D10 = pygame.transform.scale(D10,(150,150))
 
-H10 = pygame.image.load('PNG\\10H.PNG')
+H10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10H.PNG')
 H10 = pygame.transform.scale(H10,(150,150))
 
-S10 = pygame.image.load('PNG\\10S.PNG')
+S10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10S.PNG')
 S10 = pygame.transform.scale(S10,(150,150))
 
-JC = pygame.image.load('PNG\\JC.PNG')
+JC = pygame.image.load('Cardgame-Bura\Code\PNG\\JC.PNG')
 JC = pygame.transform.scale(JC,(150,150))
 
-JD = pygame.image.load('PNG\\JD.PNG')
+JD = pygame.image.load('Cardgame-Bura\Code\PNG\\JD.PNG')
 JD = pygame.transform.scale(JD,(150,150))
 
-JH = pygame.image.load('PNG\\JH.PNG')
+JH = pygame.image.load('Cardgame-Bura\Code\PNG\\JH.PNG')
 JH = pygame.transform.scale(JH,(150,150))
 
-JS = pygame.image.load('PNG\\JS.PNG')
+JS = pygame.image.load('Cardgame-Bura\Code\PNG\\JS.PNG')
 JS = pygame.transform.scale(JS,(150,150))
 
-QC = pygame.image.load('PNG\\QC.PNG')
+QC = pygame.image.load('Cardgame-Bura\Code\PNG\\QC.PNG')
 QC = pygame.transform.scale(QC,(150,150))
 
-QD = pygame.image.load('PNG\\QD.PNG')
+QD = pygame.image.load('Cardgame-Bura\Code\PNG\\QD.PNG')
 QD = pygame.transform.scale(QD,(150,150))
 
-QH = pygame.image.load('PNG\\QH.PNG')
+QH = pygame.image.load('Cardgame-Bura\Code\PNG\\QH.PNG')
 QH = pygame.transform.scale(QH,(150,150))
 
-QS = pygame.image.load('PNG\\QS.PNG')
+QS = pygame.image.load('Cardgame-Bura\Code\PNG\\QS.PNG')
 QS = pygame.transform.scale(QS,(150,150))
 
-KC = pygame.image.load('PNG\\KC.PNG')
+KC = pygame.image.load('Cardgame-Bura\Code\PNG\\KC.PNG')
 KC = pygame.transform.scale(KC,(150,150))
 
-KD = pygame.image.load('PNG\\KD.PNG')
+KD = pygame.image.load('Cardgame-Bura\Code\PNG\\KD.PNG')
 KD = pygame.transform.scale(KD,(150,150))
 
-KH = pygame.image.load('PNG\\KH.PNG')
+KH = pygame.image.load('Cardgame-Bura\Code\PNG\\KH.PNG')
 KH = pygame.transform.scale(KH,(150,150))
 
-KS = pygame.image.load('PNG\\KS.PNG')
+KS = pygame.image.load('Cardgame-Bura\Code\PNG\\KS.PNG')
 KS = pygame.transform.scale(KS,(150,150))
 
-AC = pygame.image.load('PNG\\AC.PNG')
+AC = pygame.image.load('Cardgame-Bura\Code\PNG\\AC.PNG')
 AC = pygame.transform.scale(AC,(150,150))
 
-AD = pygame.image.load('PNG\\AD.PNG')
+AD = pygame.image.load('Cardgame-Bura\Code\PNG\\AD.PNG')
 AD = pygame.transform.scale(AD,(150,150))
 
-AH = pygame.image.load('PNG\\AH.PNG')
+AH = pygame.image.load('Cardgame-Bura\Code\PNG\\AH.PNG')
 AH = pygame.transform.scale(AH,(150,150))
 
-AS = pygame.image.load('PNG\\AS.PNG')
+AS = pygame.image.load('Cardgame-Bura\Code\PNG\\AS.PNG')
 AS = pygame.transform.scale(AS,(150,150))
 
 # END OF deCK
@@ -111,23 +108,23 @@ class Card:
 cards = Card()
 cards.get_deck()
 cards.get_shuffle()
-Red_Back = pygame.image.load('red_back.png')
+Red_Back = pygame.image.load('Cardgame-Bura\Code\png\green_back.png')
 Red_Back = pygame.transform.scale(Red_Back,(150,150))
-card_Deck = pygame.image.load('Deck.png')
+card_Deck = pygame.image.load('Cardgame-Bura\Code\png\Deck.png')
 card_Deck = pygame.transform.scale(card_Deck,(200,200))
-button1 = pygame.image.load('PNG\\button1.PNG')
+button1 = pygame.image.load('Cardgame-Bura\Code\PNG\\button1.PNG')
 button1 = pygame.transform.scale(button1,(150,150))
-button2 = pygame.image.load('PNG\\button2.PNG')
+button2 = pygame.image.load('Cardgame-Bura\Code\PNG\\button2.PNG')
 button2 = pygame.transform.scale(button2,(100,100))
-button3 = pygame.image.load('PNG\\button3.PNG')
+button3 = pygame.image.load('Cardgame-Bura\Code\PNG\\button3.PNG')
 button3 = pygame.transform.scale(button3,(500,500))
-spades = pygame.image.load('PNG\\spade1.png').convert_alpha()
+spades = pygame.image.load('Cardgame-Bura\Code\PNG\\spade1.png').convert_alpha()
 spades = pygame.transform.scale(spades,(60,60))
-diamond = pygame.image.load('PNG\\diamond1.png').convert_alpha()
+diamond = pygame.image.load('Cardgame-Bura\Code\PNG\\diamond1.png').convert_alpha()
 diamond = pygame.transform.scale(diamond,(60,60))
-clubs = pygame.image.load('PNG\\club1.png').convert_alpha()
+clubs = pygame.image.load('Cardgame-Bura\Code\PNG\\club1.png').convert_alpha()
 clubs = pygame.transform.scale(clubs,(60,60))
-heart = pygame.image.load('PNG\\heart1.png').convert_alpha()
+heart = pygame.image.load('Cardgame-Bura\Code\PNG\\heart1.png').convert_alpha()
 heart = pygame.transform.scale(heart,(60,60))
 font = pygame.font.Font('freesansbold.ttf', 32)
 font1 = pygame.font.Font('freesansbold.ttf', 26)
@@ -549,8 +546,8 @@ def render_all():
          
             
 def total_score():
-    Score_ALL_User = font.render(('SCORE:'+ str(total_score_user)), True, ('black'))
-    Score_ALL_Comp = font.render(('SCORE:'+ str(total_score_comp)), True, ('black'))
+    Score_ALL_User = font.render(('SCORE:'+ str(total_score_comp)), True, ('black'))
+    Score_ALL_Comp = font.render(('SCORE:'+ str(total_score_user)), True, ('black'))
     Screen.blit(Score_ALL_User,(1000,60))
     Screen.blit(Score_ALL_Comp,(1000,700))
     
@@ -562,7 +559,7 @@ def user_moved():
     get_suits(user_cards,user_suits)
     computer_score()
     user_score()
-    
+    print("USER_MOVED func computer_Turn:",computerTurn)
     if move_made == True and computerTurn == False:
         for i in reversed(range(len(user_cards))):
             if (min(comp_move_score) == comp_move_score[i]):
@@ -688,12 +685,26 @@ def user_moved():
                 counter2+= 1
                 
             if counter2 == 1:
+                print("new game User_cards:",user_cards)
+                print("new game Comp_cards:",comp_cards)
+                print("Koziri:",koziri)
+                print("flags_user:",flags_user)
+                print("Comp_flags:",flags_comp)
+                print("user_move_score:",user_move_score)
+                print("comp_move_score:",comp_move_score)
+                print("Total Score:",comp_score_counter)
+                print("moveMade:",move_made)
+                print("computer_turn:",computerTurn)
+                print("user_moved function move_score_user:",user_move_score)
+                print("user_moved function move_score_comp:",comp_move_score)
                 if user_move_score[0] < comp_move_score[0]:
                     comps_miyvas = True
                     Update = True
                 else:
                     Update = True
             elif counter2 == 2:
+                print("user_moved function move_score_user:",user_move_score)
+                print("user_moved function move_score_comp:",comp_move_score)
                 user_move_score.sort()
                 comp_move_score.sort()
                 if user_move_score[0] > comp_move_score[0] and user_move_score[1] > comp_move_score[1]:
@@ -827,6 +838,7 @@ def Update_Game():
 def new_game():
     global koziri,Deck,game_over_flag,flags_comp,flags_user,user_score_counter,comp_score_counter,total_score_comp,total_score_user
     if winner_comp == True:
+
         total_score_comp += 1
     else:
         total_score_user += 1    
@@ -846,8 +858,9 @@ def new_game():
     koziri = kozir()
     user_score_counter = 0
     comp_score_counter = 0
+    computerTurn = False
     Update_cards(user_cards,comp_cards)
-    print("new game Deck",len(Deck))
+    print("new game Deck:",len(Deck))
     print("new game User_cards:",user_cards)
     print("new game Comp_cards:",comp_cards)
     print("Koziri:",koziri)
@@ -855,6 +868,9 @@ def new_game():
     print("Comp_flags:",flags_comp)
     print("user_move_score:",user_move_score)
     print("comp_move_score:",comp_move_score)
+    print("Total Score:",comp_score_counter)
+    print("moveMade:",move_made)
+    print("computer_turn:",computerTurn)
     game_over_flag = False
     flags_user = [False,False,False]
     flags_comp = [False,False,False]
@@ -877,7 +893,8 @@ print("Initial_user:",user_cards)
 print("Initial_comp:",comp_cards)
 print("Koziri:",koziri)
 print("Deck:",len(Deck))
-
+print("Mode Made:",move_made)
+print("computer_turn:",computerTurn)
 python = False
 while True:
     for event in pygame.event.get():
@@ -887,7 +904,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
            if event.button == 1:
                #var button
-               print("Position",mouse)
+               
                if 523 <= mouse[0] <= 615 and 677 <= mouse[1] <= 738:
                     user_won = True
                     game_over_flag = True
