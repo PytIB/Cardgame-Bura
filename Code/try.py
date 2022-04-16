@@ -2,13 +2,6 @@
 import pygame
 import random
 
-
-
-
-
-
-
-
 pygame.init()
 
 
@@ -74,51 +67,10 @@ AS = pygame.image.load('PNG\\AS.PNG')
 AS = pygame.transform.scale(AS,(150,150))
 
 # END OF deCK
-
 Screen = pygame.display.set_mode((1200,800))
-
-fps = pygame.time.Clock()
-
-Screen.fill((175,215,70))
-
-
-class Card:
-    def __init__(self,rank,suits,value,power,img,clicked,y_coordinate):
-        self.card_rank = rank
-        self.card_suit = suits
-        self.card_value = value
-        self.card_power = power
-        self.card_image = img
-        self.clicked = clicked
-        self.card_y = y_coordinate
-    
-A_D = Card('A','D',11,5,AD,False,500)
-K_D = Card('K','D',4,3,KD,False,500)
-Q_D = Card('Q','D',3,2,QD,False,500)
-J_D = Card('J','D',2,1,JD,False,500)
-D_1 = Card('1','D',10,4,D10,False,500)
-
-A_H = Card('A','H',11,5,AH,False,500)
-K_H = Card('K','H',4,3,KH,False,500)
-Q_H = Card('Q','H',3,2,QH,False,500)
-J_H = Card('J','H',2,1,JH,False,500)
-H_1 = Card('1','H',10,4,H10,False,500)
-
-A_S = Card('A','S',11,5,AS,False,500)
-K_S = Card('K','S',4,3,KS,False,500)
-Q_S = Card('Q','S',3,2,QS,False,500)
-J_S = Card('J','S',2,1,JS,False,500)
-S_1 = Card('1','S',10,4,S10,False,500)
-
-A_C = Card('A','C',11,5,AC,False,500)
-K_C = Card('K','C',4,3,KC,False,500)
-Q_C = Card('Q','C',3,2,QC,False,500)
-J_C = Card('J','C',2,1,JC,False,500)
-C_1 = Card('1','C',10,4,C10,False,500)    
-
-Red_Back = pygame.image.load('red_back.png')
+Red_Back = pygame.image.load('PNG\\red_back.png')
 Red_Back = pygame.transform.scale(Red_Back,(150,150))
-card_Deck1 = pygame.image.load('Deck.png')
+card_Deck1 = pygame.image.load('PNG\\Deck.png')
 card_Deck1 = pygame.transform.scale(card_Deck1,(200,200))
 button1 = pygame.image.load('PNG\\button1.PNG')
 button1 = pygame.transform.scale(button1,(100,100))
@@ -137,6 +89,52 @@ heart = pygame.transform.scale(heart,(60,60))
 font = pygame.font.Font('freesansbold.ttf', 32)
 text = font.render('YOU LOST', True, ('black'))
 
+
+fps = pygame.time.Clock()
+
+Screen.fill((175,215,70))
+
+
+class Card:
+    def __init__(self,rank,suits,value,power,img,img_back,clicked,y_coordinate):
+        self.card_rank = rank
+        self.card_suit = suits
+        self.card_value = value
+        self.card_power = power
+        self.card_image = img
+        self.card_clicked = clicked
+        self.card_y = y_coordinate
+        self.card_image_back = img_back   
+A_D = Card('A','D',11,5,AD,Red_Back,False,500)
+K_D = Card('K','D',4,3,KD,Red_Back,False,500)
+Q_D = Card('Q','D',3,2,QD,Red_Back,False,500)
+J_D = Card('J','D',2,1,JD,Red_Back,False,500)
+D_1 = Card('1','D',10,4,D10,Red_Back,False,500)
+
+A_H = Card('A','H',11,5,AH,Red_Back,False,500)
+K_H = Card('K','H',4,3,KH,Red_Back,False,500)
+Q_H = Card('Q','H',3,2,QH,Red_Back,False,500)
+J_H = Card('J','H',2,1,JH,Red_Back,False,500)
+H_1 = Card('1','H',10,4,H10,Red_Back,False,500)
+
+A_S = Card('A','S',11,5,AS,Red_Back,False,500)
+K_S = Card('K','S',4,3,KS,Red_Back,False,500)
+Q_S = Card('Q','S',3,2,QS,Red_Back,False,500)
+J_S = Card('J','S',2,1,JS,Red_Back,False,500)
+S_1 = Card('1','S',10,4,S10,Red_Back,False,500)
+
+A_C = Card('A','C',11,5,AC,Red_Back,False,500)
+K_C = Card('K','C',4,3,KC,Red_Back,False,500)
+Q_C = Card('Q','C',3,2,QC,Red_Back,False,500)
+J_C = Card('J','C',2,1,JC,Red_Back,False,500)
+C_1 = Card('1','C',10,4,C10,Red_Back,False,500)    
+
+
+
+# stores turn  true -> user false -> comp 
+turn = True
+user_made_move = False
+computer_made_move = False
 user_cards = []
 comp_cards = []
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
@@ -179,22 +177,77 @@ def Update_cards(list,list2):
             var2 = random.randrange(0, len(card_Deck))       
             list2.insert(0,card_Deck[var2])
             card_Deck.pop(var2)
+
+def check_move():
+    if turn == True:
+        suits1 = user_cards[0].card_suit
+        suits2 = user_cards[1].card_suit
+        suits3 = user_cards[2].card_suit
+        card_y1 = user_cards[0].card_y
+        card_y2 = user_cards[1].card_y
+        card_y3 = user_cards[2].card_y
+        if card_y1 == 450 and card_y2 == 450 and card_y3 == 500:
+            if suits1 == suits2:
+                return True
+            else:
+                return False
+        elif card_y1 == 450 and card_y2 == 500 and card_y3 == 450:
+            if suits1 == suits3:
+                return True
+            else:
+                return False
+        elif card_y1 == 500 and card_y2 == 450 and card_y3 == 450:
+            if suits2 == suits3:
+                return True
+            else:
+                return False
+        elif card_y1 == 450 and card_y2 == 450 and card_y3 == 450:
+            if suits1 == suits2 and suits1 == suits3:
+                return True
+            else:
+                return False
+        elif card_y1 == 500 and card_y2 == 500 and card_y3 == 500:
+            return False
+        else:
+            return True
+    # if it is computers move       
+    else:
+        pass 
 shuffle()
 koziri = kozir()
 Update_cards(user_cards,comp_cards)
-
+def computer_move():
+    comp_cards[0].card_clicked = True
+    
+    
+def process():
+    comp_cards.pop(0)
+    user_cards.pop(0)
+    Update_cards(user_cards,comp_cards)
 def user_cards_render(list,x_coordinate):
     for i in range(len(list)):   
         Screen.blit(list[i].card_image,(x_coordinate,list[i].card_y))
+        if user_made_move == True:
+            if list[i].card_y == 450:
+                list[i].card_y = 300
         x_coordinate += 100
 
 
 def comp_cards_render(list,x_coordinate):
     for i in range(len(list)):
-        Screen.blit(Red_Back,(x_coordinate,50))
+        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
+        if computer_made_move == True:
+            if list[i].card_clicked == True:
+                list[i].card_y = 650
         x_coordinate += 100
+
+
+
+
 Surface = pygame.Surface((1200,800))
 Surface.fill((175,215,70))
+
+
 
    
                 
@@ -231,25 +284,35 @@ while True:
                       
                      
                if 400 <= mouse[0] <= 492 and 678 <= mouse[1] <= 740:  
-                   print("Clicked at 400")
-                  
+                   print(check_move())
+                   if check_move() == True:
+                      user_made_move = True
+                      computer_move()
+                      computer_made_move = True
+                   else:
+                       user_cards[0].card_y = 500
+                       user_cards[1].card_y = 500
+                       user_cards[2].card_y = 500
                if 318 <= mouse[0] <= 395 and 510 <= mouse[1] <= 639:
-                       if user_cards[0].card_y == 500:
-                           user_cards[0].card_y = 450
-                       else:
-                           user_cards[0].card_y = 500
+                       if user_made_move == False:
+                            if user_cards[0].card_y == 500:
+                                user_cards[0].card_y = 450
+                            else:
+                                user_cards[0].card_y = 500
                             
                if 410 <= mouse[0] <= 491 and 514 <= mouse[1] <= 638:
-                         if user_cards[1].card_y == 500:
-                           user_cards[1].card_y = 450
-                         else:
-                           user_cards[1].card_y = 500
+                         if user_made_move == False:
+                            if user_cards[1].card_y == 500:
+                                user_cards[1].card_y = 450
+                            else:
+                                user_cards[1].card_y = 500
                             
                if 512 <= mouse[0] <= 639 and 510 <= mouse[1] <= 636:
-                        if user_cards[2].card_y == 500:
-                           user_cards[2].card_y = 450
-                        else:
-                           user_cards[2].card_y = 500
+                        if user_made_move == False:
+                            if user_cards[2].card_y == 500:
+                                user_cards[2].card_y = 450
+                            else:
+                                user_cards[2].card_y = 500
                
 
     Screen.blit(Surface,(0,0))
@@ -257,11 +320,10 @@ while True:
     Screen.blit(card_Deck1,(0,250))      
     kozir_render()
     
-    
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
     user_cards_render(user_cards,300)
     comp_cards_render(comp_cards,300)
-   
+    
     pygame.display.update()
     fps.tick(60)
