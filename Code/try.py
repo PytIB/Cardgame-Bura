@@ -1,90 +1,90 @@
 
 import pygame
 import random
-
+import time
 pygame.init()
 
 
 # start of deck 
-C10 = pygame.image.load('PNG\\10C.PNG')
+C10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10C.PNG')
 C10 = pygame.transform.scale(C10,(150,150))
 
-D10 = pygame.image.load('PNG\\10D.PNG')
+D10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10D.PNG')
 D10 = pygame.transform.scale(D10,(150,150))
 
-H10 = pygame.image.load('PNG\\10H.PNG')
+H10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10H.PNG')
 H10 = pygame.transform.scale(H10,(150,150))
 
-S10 = pygame.image.load('PNG\\10S.PNG')
+S10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10S.PNG')
 S10 = pygame.transform.scale(S10,(150,150))
 
-JC = pygame.image.load('PNG\\JC.PNG')
+JC = pygame.image.load('Cardgame-Bura\Code\PNG\\JC.PNG')
 JC = pygame.transform.scale(JC,(150,150))
 
-JD = pygame.image.load('PNG\\JD.PNG')
+JD = pygame.image.load('Cardgame-Bura\Code\PNG\\JD.PNG')
 JD = pygame.transform.scale(JD,(150,150))
 
-JH = pygame.image.load('PNG\\JH.PNG')
+JH = pygame.image.load('Cardgame-Bura\Code\PNG\\JH.PNG')
 JH = pygame.transform.scale(JH,(150,150))
 
-JS = pygame.image.load('PNG\\JS.PNG')
+JS = pygame.image.load('Cardgame-Bura\Code\PNG\\JS.PNG')
 JS = pygame.transform.scale(JS,(150,150))
 
-QC = pygame.image.load('PNG\\QC.PNG')
+QC = pygame.image.load('Cardgame-Bura\Code\PNG\\QC.PNG')
 QC = pygame.transform.scale(QC,(150,150))
 
-QD = pygame.image.load('PNG\\QD.PNG')
+QD = pygame.image.load('Cardgame-Bura\Code\PNG\\QD.PNG')
 QD = pygame.transform.scale(QD,(150,150))
 
-QH = pygame.image.load('PNG\\QH.PNG')
+QH = pygame.image.load('Cardgame-Bura\Code\PNG\\QH.PNG')
 QH = pygame.transform.scale(QH,(150,150))
 
-QS = pygame.image.load('PNG\\QS.PNG')
+QS = pygame.image.load('Cardgame-Bura\Code\PNG\\QS.PNG')
 QS = pygame.transform.scale(QS,(150,150))
 
-KC = pygame.image.load('PNG\\KC.PNG')
+KC = pygame.image.load('Cardgame-Bura\Code\PNG\\KC.PNG')
 KC = pygame.transform.scale(KC,(150,150))
 
-KD = pygame.image.load('PNG\\KD.PNG')
+KD = pygame.image.load('Cardgame-Bura\Code\PNG\\KD.PNG')
 KD = pygame.transform.scale(KD,(150,150))
 
-KH = pygame.image.load('PNG\\KH.PNG')
+KH = pygame.image.load('Cardgame-Bura\Code\PNG\\KH.PNG')
 KH = pygame.transform.scale(KH,(150,150))
 
-KS = pygame.image.load('PNG\\KS.PNG')
+KS = pygame.image.load('Cardgame-Bura\Code\PNG\\KS.PNG')
 KS = pygame.transform.scale(KS,(150,150))
 
-AC = pygame.image.load('PNG\\AC.PNG')
+AC = pygame.image.load('Cardgame-Bura\Code\PNG\\AC.PNG')
 AC = pygame.transform.scale(AC,(150,150))
 
-AD = pygame.image.load('PNG\\AD.PNG')
+AD = pygame.image.load('Cardgame-Bura\Code\PNG\\AD.PNG')
 AD = pygame.transform.scale(AD,(150,150))
 
-AH = pygame.image.load('PNG\\AH.PNG')
+AH = pygame.image.load('Cardgame-Bura\Code\PNG\\AH.PNG')
 AH = pygame.transform.scale(AH,(150,150))
 
-AS = pygame.image.load('PNG\\AS.PNG')
+AS = pygame.image.load('Cardgame-Bura\Code\PNG\\AS.PNG')
 AS = pygame.transform.scale(AS,(150,150))
 
 # END OF deCK
 Screen = pygame.display.set_mode((1200,800))
-Red_Back = pygame.image.load('PNG\\red_back.png')
+Red_Back = pygame.image.load('Cardgame-Bura\Code\PNG\\red_back.png')
 Red_Back = pygame.transform.scale(Red_Back,(150,150))
-card_Deck1 = pygame.image.load('PNG\\Deck.png')
+card_Deck1 = pygame.image.load('Cardgame-Bura\Code\PNG\\Deck.png')
 card_Deck1 = pygame.transform.scale(card_Deck1,(200,200))
-button1 = pygame.image.load('PNG\\button1.PNG')
+button1 = pygame.image.load('Cardgame-Bura\Code\PNG\\button1.PNG')
 button1 = pygame.transform.scale(button1,(100,100))
-button2 = pygame.image.load('PNG\\button2.PNG')
+button2 = pygame.image.load('Cardgame-Bura\Code\PNG\\button2.PNG')
 button2 = pygame.transform.scale(button2,(100,100))
-button3 = pygame.image.load('PNG\\button3.PNG')
+button3 = pygame.image.load('Cardgame-Bura\Code\PNG\\button3.PNG')
 button3 = pygame.transform.scale(button3,(500,500))
-spades = pygame.image.load('PNG\\spade1.png').convert_alpha()
+spades = pygame.image.load('Cardgame-Bura\Code\PNG\\spade1.png').convert_alpha()
 spades = pygame.transform.scale(spades,(60,60))
-diamond = pygame.image.load('PNG\\diamond1.png').convert_alpha()
+diamond = pygame.image.load('Cardgame-Bura\Code\PNG\\diamond1.png').convert_alpha()
 diamond = pygame.transform.scale(diamond,(60,60))
-clubs = pygame.image.load('PNG\\club1.png').convert_alpha()
+clubs = pygame.image.load('Cardgame-Bura\Code\PNG\\club1.png').convert_alpha()
 clubs = pygame.transform.scale(clubs,(60,60))
-heart = pygame.image.load('PNG\\heart1.png').convert_alpha()
+heart = pygame.image.load('Cardgame-Bura\Code\PNG\\heart1.png').convert_alpha()
 heart = pygame.transform.scale(heart,(60,60))
 font = pygame.font.Font('freesansbold.ttf', 32)
 text = font.render('YOU LOST', True, ('black'))
@@ -135,6 +135,7 @@ C_1 = Card('1','C',10,4,C10,Red_Back,False,500)
 turn = True
 user_made_move = False
 computer_made_move = False
+wait = False
 user_cards = []
 comp_cards = []
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
@@ -241,26 +242,26 @@ def computer_move():
     
     
 def process():
+    time.sleep(5)
     comp_cards.pop(0)
     user_cards.pop(0)
     Update_cards(user_cards,comp_cards)
 def user_cards_render(list,x_coordinate):
-    for i in range(len(list)):   
-        Screen.blit(list[i].card_image,(x_coordinate,list[i].card_y))
+    for i in range(len(list)):
         if user_made_move == True:
             if list[i].card_y == 450:
-                list[i].card_y = 300
+                list[i].card_y = 300  
+        Screen.blit(list[i].card_image,(x_coordinate,list[i].card_y))        
         x_coordinate += 100
-
-
+    
 def comp_cards_render(list,x_coordinate):
     for i in range(len(list)):
-        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
         if computer_made_move == True:
             if list[i].card_clicked == True:
-                list[i].card_y = 650
+                list[i].card_y = 650    
+        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))         
         x_coordinate += 100
-    pygame.display.update()
+    
 
 
 
@@ -333,23 +334,14 @@ while True:
                                 user_cards[2].card_y = 450
                             else:
                                 user_cards[2].card_y = 500
-               
-
     Screen.blit(Surface,(0,0))
     mouse = pygame.mouse.get_pos()
     Screen.blit(card_Deck1,(0,250))      
     kozir_render()
-    
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
-    if computer_made_move == True and user_made_move == True:
-        process()
-        computer_made_move = False
-        user_made_move = False
     user_cards_render(user_cards,300)
     comp_cards_render(comp_cards,300)
-    if computer_made_move == True and user_made_move == True:
-        process()
-        computer_made_move = False
+       
     pygame.display.update()
     fps.tick(60)
