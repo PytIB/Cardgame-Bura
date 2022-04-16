@@ -324,6 +324,8 @@ while True:
     Screen.blit(button2,(520,660))
     user_cards_render(user_cards,300)
     comp_cards_render(comp_cards,300)
-    
+    if computer_made_move == True and user_made_move == True:
+        process()
+        computer_made_move = False
     pygame.display.update()
     fps.tick(60)
