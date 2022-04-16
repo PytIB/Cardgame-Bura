@@ -180,34 +180,54 @@ def Update_cards(list,list2):
 
 def check_move():
     if turn == True:
-        suits1 = user_cards[0].card_suit
-        suits2 = user_cards[1].card_suit
-        suits3 = user_cards[2].card_suit
-        card_y1 = user_cards[0].card_y
-        card_y2 = user_cards[1].card_y
-        card_y3 = user_cards[2].card_y
-        if card_y1 == 450 and card_y2 == 450 and card_y3 == 500:
-            if suits1 == suits2:
-                return True
-            else:
+        if len(user_cards) == 1:
+             suits1 = user_cards[0].card_suit
+             card_y1 = user_cards[0].card_y
+        elif len(user_cards) == 2:
+            suits1 = user_cards[0].card_suit
+            card_y1 = user_cards[0].card_y
+            suits2 = user_cards[0].card_suit
+            card_y2 = user_cards[0].card_y
+        else:
+            suits1 = user_cards[0].card_suit
+            suits2 = user_cards[1].card_suit
+            suits3 = user_cards[2].card_suit
+            card_y1 = user_cards[0].card_y
+            card_y2 = user_cards[1].card_y
+            card_y3 = user_cards[2].card_y
+        if len(user_cards) == 3:
+            if card_y1 == 450 and card_y2 == 450 and card_y3 == 500:
+                if suits1 == suits2:
+                    return True
+                else:
+                    return False
+            elif card_y1 == 450 and card_y2 == 500 and card_y3 == 450:
+                if suits1 == suits3:
+                    return True
+                else:
+                    return False
+            elif card_y1 == 500 and card_y2 == 450 and card_y3 == 450:
+                if suits2 == suits3:
+                    return True
+                else:
+                    return False
+            elif card_y1 == 450 and card_y2 == 450 and card_y3 == 450:
+                if suits1 == suits2 and suits1 == suits3:
+                    return True
+                else:
+                    return False
+            elif card_y1 == 500 and card_y2 == 500 and card_y3 == 500:
                 return False
-        elif card_y1 == 450 and card_y2 == 500 and card_y3 == 450:
-            if suits1 == suits3:
-                return True
             else:
-                return False
-        elif card_y1 == 500 and card_y2 == 450 and card_y3 == 450:
-            if suits2 == suits3:
                 return True
+        elif len(user_cards) == 2:
+            if card_y1 == 450 and card_y2 == 450:
+                if suits1 == suits2:
+                    return True
+                else:
+                    return False
             else:
-                return False
-        elif card_y1 == 450 and card_y2 == 450 and card_y3 == 450:
-            if suits1 == suits2 and suits1 == suits3:
                 return True
-            else:
-                return False
-        elif card_y1 == 500 and card_y2 == 500 and card_y3 == 500:
-            return False
         else:
             return True
     # if it is computers move       
@@ -240,7 +260,7 @@ def comp_cards_render(list,x_coordinate):
             if list[i].card_clicked == True:
                 list[i].card_y = 650
         x_coordinate += 100
-
+    pygame.display.update()
 
 
 
@@ -322,6 +342,10 @@ while True:
     
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
+    if computer_made_move == True and user_made_move == True:
+        process()
+        computer_made_move = False
+        user_made_move = False
     user_cards_render(user_cards,300)
     comp_cards_render(comp_cards,300)
     if computer_made_move == True and user_made_move == True:
