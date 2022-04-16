@@ -96,7 +96,7 @@ Screen.fill((175,215,70))
 
 
 class Card:
-    def __init__(self,rank,suits,value,power,img,img_back,clicked,y_coordinate):
+    def __init__(self,rank,suits,value,power,img,img_back,clicked,y_coordinate,x_coordinate):
         self.card_rank = rank
         self.card_suit = suits
         self.card_value = value
@@ -104,30 +104,31 @@ class Card:
         self.card_image = img
         self.card_clicked = clicked
         self.card_y = y_coordinate
-        self.card_image_back = img_back   
-A_D = Card('A','D',11,5,AD,Red_Back,False,500)
-K_D = Card('K','D',4,3,KD,Red_Back,False,500)
-Q_D = Card('Q','D',3,2,QD,Red_Back,False,500)
-J_D = Card('J','D',2,1,JD,Red_Back,False,500)
-D_1 = Card('1','D',10,4,D10,Red_Back,False,500)
+        self.card_image_back = img_back  
+        self.card_x = x_coordinate 
+A_D = Card('A','D',11,5,AD,Red_Back,False,500,300)
+K_D = Card('K','D',4,3,KD,Red_Back,False,500,300)
+Q_D = Card('Q','D',3,2,QD,Red_Back,False,500,300)
+J_D = Card('J','D',2,1,JD,Red_Back,False,500,300)
+D_1 = Card('1','D',10,4,D10,Red_Back,False,500,300)
 
-A_H = Card('A','H',11,5,AH,Red_Back,False,500)
-K_H = Card('K','H',4,3,KH,Red_Back,False,500)
-Q_H = Card('Q','H',3,2,QH,Red_Back,False,500)
-J_H = Card('J','H',2,1,JH,Red_Back,False,500)
-H_1 = Card('1','H',10,4,H10,Red_Back,False,500)
+A_H = Card('A','H',11,5,AH,Red_Back,False,500,300)
+K_H = Card('K','H',4,3,KH,Red_Back,False,500,300)
+Q_H = Card('Q','H',3,2,QH,Red_Back,False,500,300)
+J_H = Card('J','H',2,1,JH,Red_Back,False,500,300)
+H_1 = Card('1','H',10,4,H10,Red_Back,False,500,300)
 
-A_S = Card('A','S',11,5,AS,Red_Back,False,500)
-K_S = Card('K','S',4,3,KS,Red_Back,False,500)
-Q_S = Card('Q','S',3,2,QS,Red_Back,False,500)
-J_S = Card('J','S',2,1,JS,Red_Back,False,500)
-S_1 = Card('1','S',10,4,S10,Red_Back,False,500)
+A_S = Card('A','S',11,5,AS,Red_Back,False,500,300)
+K_S = Card('K','S',4,3,KS,Red_Back,False,500,300)
+Q_S = Card('Q','S',3,2,QS,Red_Back,False,500,300)
+J_S = Card('J','S',2,1,JS,Red_Back,False,500,300)
+S_1 = Card('1','S',10,4,S10,Red_Back,False,500,300)
 
-A_C = Card('A','C',11,5,AC,Red_Back,False,500)
-K_C = Card('K','C',4,3,KC,Red_Back,False,500)
-Q_C = Card('Q','C',3,2,QC,Red_Back,False,500)
-J_C = Card('J','C',2,1,JC,Red_Back,False,500)
-C_1 = Card('1','C',10,4,C10,Red_Back,False,500)    
+A_C = Card('A','C',11,5,AC,Red_Back,False,500,300)
+K_C = Card('K','C',4,3,KC,Red_Back,False,500,300)
+Q_C = Card('Q','C',3,2,QC,Red_Back,False,500,300)
+J_C = Card('J','C',2,1,JC,Red_Back,False,500,300)
+C_1 = Card('1','C',10,4,C10,Red_Back,False,500,300)    
 
 
 
@@ -168,8 +169,6 @@ def kozir_render():
     else:
         Screen.blit(clubs,(72,320))
 def Update_cards(list,list2):
-
-
     if len(card_Deck) != 0:
         while(len(list) != 3 and len(list2) != 3 and len(card_Deck) != 0):
             var = random.randrange(0, len(card_Deck))
@@ -178,7 +177,12 @@ def Update_cards(list,list2):
             var2 = random.randrange(0, len(card_Deck))       
             list2.insert(0,card_Deck[var2])
             card_Deck.pop(var2)
-
+        list[0].card_x = 300
+        list[1].card_x = 400
+        list[2].card_x = 500
+        list2[0].card_x = 300
+        list2[1].card_x = 400
+        list2[2].card_x = 500
 def check_move():
     if turn == True:
         if len(user_cards) == 1:
@@ -240,25 +244,26 @@ Update_cards(user_cards,comp_cards)
 def computer_move():
     comp_cards[0].card_clicked = True
     
-    
+def coordinate_update(list,bool1):
+    if bool1 == True:
+        for i in range(len(list)):
+            if list[i].card_y == 450:
+                list[i].card_y = 300
+    else:
+        for i in range(len(list)):
+            if list[i].card_clicked == True:
+                list[i].card_y = 650
 def process():
-    time.sleep(5)
     comp_cards.pop(0)
     user_cards.pop(0)
     Update_cards(user_cards,comp_cards)
 def user_cards_render(list,x_coordinate):
     for i in range(len(list)):
-        if user_made_move == True:
-            if list[i].card_y == 450:
-                list[i].card_y = 300  
-        Screen.blit(list[i].card_image,(x_coordinate,list[i].card_y))        
+        Screen.blit(list[i].card_image,(list[i].card_x,list[i].card_y))        
         x_coordinate += 100
     
 def comp_cards_render(list,x_coordinate):
-    for i in range(len(list)):
-        if computer_made_move == True:
-            if list[i].card_clicked == True:
-                list[i].card_y = 650    
+    for i in range(len(list)):  
         Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))         
         x_coordinate += 100
     
@@ -294,6 +299,11 @@ Surface.fill((175,215,70))
 
 
 while True:
+    if user_made_move == True and computer_made_move == True:
+        pygame.time.wait(600)
+        process()
+        user_made_move = False
+        computer_made_move = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -307,9 +317,12 @@ while True:
                if 400 <= mouse[0] <= 492 and 678 <= mouse[1] <= 740:  
                    print(check_move())
                    if check_move() == True:
-                      user_made_move = True
+                      user_made_move = True 
                       computer_move()
                       computer_made_move = True
+                      coordinate_update(user_cards,True)
+                      coordinate_update(comp_cards,False)
+                      
                    else:
                        user_cards[0].card_y = 500
                        user_cards[1].card_y = 500
@@ -342,6 +355,6 @@ while True:
     Screen.blit(button2,(520,660))
     user_cards_render(user_cards,300)
     comp_cards_render(comp_cards,300)
-       
+   
     pygame.display.update()
     fps.tick(60)
