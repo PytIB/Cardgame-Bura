@@ -136,7 +136,10 @@ C_1 = Card('1','C',10,4,C10,Red_Back,False,500,300)
 turn = True
 user_made_move = False
 computer_made_move = False
-wait = False
+user_cards_taken = []
+comp_cards_taken = []
+user_score = 0
+comp_score = 0
 user_cards = []
 comp_cards = []
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
@@ -237,13 +240,95 @@ def check_move():
             return True
     # if it is computers move       
     else:
-        pass 
+        user_card_counter = 0
+        comp_card_counter = 0
+        bura_or_maliutka = False
+        if user_cards[0].card_suit == user_cards[1].card_suit and user_cards[0].card_suit == user_cards[2].card_suit:
+            bura_or_maliutka = True
+        for i in range(len(comp_cards)):
+            if comp_cards[i].card_clicked == True:
+                comp_card_counter += 1
+            if user_cards[i].card_y == 450:
+                user_card_counter += 1
+        if comp_card_counter != user_card_counter and bura_or_maliutka == False:
+            return False
+        else:
+            return True   
+        
+            
+
 shuffle()
 koziri = kozir()
 Update_cards(user_cards,comp_cards)
-def computer_move():
+
+
+def who_takes_cards():
+    user_card_values = []
+    comp_card_values = []
+    for i in range(len(user_cards)):
+        if user_cards[i].card_y < 500:
+            user_card_values.append(user_cards[i].card_power)
+        if comp_cards[i].card_clicked == True:
+            comp_card_values.append(comp_cards[i].card_power)
+    print("User_card_values:",user_card_values)
+    print("Comp_Card_values:",comp_card_values)
+    if len(user_card_values) == 1:
+        if user_card_values[0] > comp_card_values[0]:
+            return True
+        else:
+            return False
+    elif len(user_card_values) == 2:
+       user_card_values.sort()
+       comp_card_values.sort()
+       if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1]:
+           return True
+       else:
+           return False
+    elif len(user_card_values) == 3:
+        user_card_values.sort()
+        comp_card_values.sort()
+        if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1] and user_card_values[2] > comp_card_values[2]:
+            return True
+        else:
+            return False
+
+def update_card_power():
+    if turn == True:
+        for i in range(len(user_cards)):
+            if user_cards[i].card_suit == koziri:
+                if user_cards[i].card_power < 20:
+                    user_cards[i].card_power = user_cards[i].card_power * 20
+            if comp_cards[i].card_suit == koziri:
+                if comp_cards[i].card_power < 20:
+                    comp_cards[i].card_power = comp_cards[i].card_power * 20
+            if user_cards[i].card_y == 450 and user_cards[i].card_suit != koziri:
+                user_cards[i].card_power = user_cards[i].card_power + 5
+            if user_cards[i].card_y == 450 and comp_cards[i].card_suit == user_cards[i].card_suit:
+                comp_cards[i].card_power = comp_cards[i].card_power + 5
+    else:
+         for i in range(len(comp_cards)):
+            if user_cards[i].card_suit == koziri:
+                if user_cards[i].card_power < 20:
+                    user_cards[i].card_power = user_cards[i].card_power * 20
+            if comp_cards[i].card_suit == koziri:
+                if comp_cards[i].card_power < 20:
+                    comp_cards[i].card_power = comp_cards[i].card_power * 20
+            if comp_cards[i].card_clicked == True and comp_cards[i].card_suit != koziri:
+                comp_cards[i].card_power = comp_cards[i].card_power + 5
+            if comp_cards[i].card_clicked == True and comp_cards[i].card_suit == user_cards[i].card_suit:
+                user_cards[i].card_power = user_cards[i].card_power + 5
+def computer_move_on_user_turn():
     comp_cards[0].card_clicked = True
+    update_card_power()
     
+    
+def computer_move_on_comp_turn():
+    global computer_made_move
+    if turn == False:
+        comp_cards[0].card_clicked = True
+        update_card_power()
+        coordinate_update(comp_cards,False)
+        computer_made_move = True
 def coordinate_update(list,bool1):
     if bool1 == True:
         for i in range(len(list)):
@@ -253,20 +338,47 @@ def coordinate_update(list,bool1):
         for i in range(len(list)):
             if list[i].card_clicked == True:
                 list[i].card_y = 650
+
 def process():
-    comp_cards.pop(0)
-    user_cards.pop(0)
+    global turn,comp_score,user_score
+    if who_takes_cards() == True:
+        turn = True
+        for i in range(len(user_cards)):
+            if user_cards[i].card_y == 300:
+                user_cards_taken.append(user_cards[i])
+                user_score += user_cards[i].card_value
+            if comp_cards[i].card_clicked == True:
+                user_cards_taken.append(comp_cards[i])
+                user_score += comp_cards[i].card_value
+    else:
+        turn = False
+        for i in range(len(user_cards)):
+            if user_cards[i].card_y == 300:
+                comp_cards_taken.append(user_cards[i])
+                comp_score += user_cards[i].card_value
+            if comp_cards[i].card_clicked == True:
+                comp_cards_taken.append(comp_cards[i])
+                comp_score += comp_cards[i].card_value
+   
+
+    for i in reversed(range(len(user_cards))):
+        if user_cards[i].card_y == 300:
+            user_cards.pop(i)
+        if comp_cards[i].card_clicked == True:
+            comp_cards.pop(i)
+   
     Update_cards(user_cards,comp_cards)
-def user_cards_render(list,x_coordinate):
+
+def user_cards_render(list):
     for i in range(len(list)):
         Screen.blit(list[i].card_image,(list[i].card_x,list[i].card_y))        
-        x_coordinate += 100
+        
     
-def comp_cards_render(list,x_coordinate):
+def comp_cards_render(list):
     for i in range(len(list)):  
-        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))         
-        x_coordinate += 100
-    
+        Screen.blit(comp_cards[i].card_image,(list[i].card_x,comp_cards[i].card_y-450))         
+        
+  
 
 
 
@@ -300,7 +412,7 @@ Surface.fill((175,215,70))
 
 while True:
     if user_made_move == True and computer_made_move == True:
-        pygame.time.wait(600)
+        pygame.time.wait(750)
         process()
         user_made_move = False
         computer_made_move = False
@@ -317,11 +429,13 @@ while True:
                if 400 <= mouse[0] <= 492 and 678 <= mouse[1] <= 740:  
                    print(check_move())
                    if check_move() == True:
-                      user_made_move = True 
-                      computer_move()
-                      computer_made_move = True
+                      user_made_move = True
+                      if turn == True:
+                        computer_move_on_user_turn()
+                        coordinate_update(comp_cards,False)
+                        computer_made_move = True
                       coordinate_update(user_cards,True)
-                      coordinate_update(comp_cards,False)
+                      
                       
                    else:
                        user_cards[0].card_y = 500
@@ -353,8 +467,19 @@ while True:
     kozir_render()
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
-    user_cards_render(user_cards,300)
-    comp_cards_render(comp_cards,300)
-   
+    computer_move_on_comp_turn()
+    user_cards_render(user_cards)
+    comp_cards_render(comp_cards)
+    if user_score > 30 or comp_score > 30:
+        if user_score > 30:
+            pass
+           # print("user wins")
+           # print("Score:",user_score)
+        else:
+            pass
+           # print("comp wins")
+            #print("Score:",comp_score)
+    print("Comp:",comp_cards[0].card_power)
+    print("User:",user_cards[0].card_power)      
     pygame.display.update()
     fps.tick(60)
