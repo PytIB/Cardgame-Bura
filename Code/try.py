@@ -142,6 +142,8 @@ user_score = 0
 comp_score = 0
 user_cards = []
 comp_cards = []
+user_bura_flag = False
+comp_bura_flag = False
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
 def shuffle():
     for n in range(500):
@@ -180,13 +182,9 @@ def Update_cards(list,list2):
             var2 = random.randrange(0, len(card_Deck))       
             list2.insert(0,card_Deck[var2])
             card_Deck.pop(var2)
-        list[0].card_x = 300
-        list[1].card_x = 400
-        list[2].card_x = 500
-        list2[0].card_x = 300
-        list2[1].card_x = 400
-        list2[2].card_x = 500
+        
 def check_move():
+    global user_bura_flag,comp_bura_flag
     if turn == True:
         if len(user_cards) == 1:
              suits1 = user_cards[0].card_suit
@@ -204,6 +202,11 @@ def check_move():
             card_y2 = user_cards[1].card_y
             card_y3 = user_cards[2].card_y
         if len(user_cards) == 3:
+            if comp_cards[0].card_clicked == True and comp_cards[1].card_clicked == True and comp_cards[2].card_clicked == True:
+                if user_cards[0].card_y == 450 and user_cards[1].card_y == 450 and user_cards[2].card_y == 450:
+                    return True
+                else:
+                    return False
             if card_y1 == 450 and card_y2 == 450 and card_y3 == 500:
                 if suits1 == suits2:
                     return True
@@ -242,25 +245,48 @@ def check_move():
     else:
         user_card_counter = 0
         comp_card_counter = 0
-        bura_or_maliutka = False
+    
+        if user_cards[0].card_y == 500 and user_cards[1].card_y == 500 and user_cards[2].card_y == 500:
+            return False
         if user_cards[0].card_suit == user_cards[1].card_suit and user_cards[0].card_suit == user_cards[2].card_suit:
-            bura_or_maliutka = True
+            #temporary solution
+            user_bura_flag = True
+            
+        if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+            comp_bura_flag = True
+            
         for i in range(len(comp_cards)):
             if comp_cards[i].card_clicked == True:
                 comp_card_counter += 1
             if user_cards[i].card_y == 450:
                 user_card_counter += 1
-        if comp_card_counter != user_card_counter and bura_or_maliutka == False:
-            return False
+        if user_card_counter != comp_card_counter and user_bura_flag == True:
+            return True
+        elif user_card_counter == comp_card_counter:
+            return True
         else:
-            return True   
+            return False  
         
             
 
 shuffle()
-koziri = kozir()
-Update_cards(user_cards,comp_cards)
+koziri = 'H'
+comp_cards = [A_D,Q_D,K_D]
+user_cards = [A_C,Q_H,H_1]
+card_Deck.remove(A_D)
+card_Deck.remove(Q_D)
+card_Deck.remove(K_D)
+card_Deck.remove(A_C)
+card_Deck.remove(Q_H)
+card_Deck.remove(H_1)
+#Update_cards(user_cards,comp_cards)
 
+
+
+def card_print():
+    
+    print("User:"+"["+user_cards[0].card_rank + user_cards[0].card_suit + "," + user_cards[1].card_rank + user_cards[1].card_suit + "," + user_cards[2].card_rank + user_cards[2].card_suit+"]")
+    print("Comp:"+"["+comp_cards[0].card_rank + comp_cards[0].card_suit + "," + comp_cards[1].card_rank + comp_cards[1].card_suit + "," +comp_cards[2].card_rank + comp_cards[2].card_suit+"]")
 
 def who_takes_cards():
     user_card_values = []
@@ -280,55 +306,278 @@ def who_takes_cards():
     elif len(user_card_values) == 2:
        user_card_values.sort()
        comp_card_values.sort()
-       if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1]:
-           return True
+       if turn == False:
+            if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1]:
+                return True
+            else:
+                return False
        else:
-           return False
+            if comp_card_values[0] > user_card_values[0] and comp_card_values[1] > user_card_values[1]:
+                return False
+            else:
+                return True
     elif len(user_card_values) == 3:
         user_card_values.sort()
         comp_card_values.sort()
-        if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1] and user_card_values[2] > comp_card_values[2]:
-            return True
+        if turn == False and user_bura_flag == False:
+            if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1] and user_card_values[2] > comp_card_values[2]:
+                return True
+            else:
+                return False
         else:
-            return False
+            if comp_bura_flag == True:
+                if user_card_values[0] > comp_card_values[0] and user_card_values[1] > comp_card_values[1] and user_card_values[2] > comp_card_values[2]:
+                    return True
+                else:
+                    return False
+            else:
+                if comp_card_values[0] > user_card_values[0] and comp_card_values[1] > user_card_values[1] and comp_card_values[2] > user_card_values[2]:
+                    return False
+                else:
+                    return True
 
 def update_card_power():
+    suit = ""
     if turn == True:
-        for i in range(len(user_cards)):
-            if user_cards[i].card_suit == koziri:
-                if user_cards[i].card_power < 20:
-                    user_cards[i].card_power = user_cards[i].card_power * 20
-            if comp_cards[i].card_suit == koziri:
-                if comp_cards[i].card_power < 20:
-                    comp_cards[i].card_power = comp_cards[i].card_power * 20
-            if user_cards[i].card_y == 450 and user_cards[i].card_suit != koziri:
-                user_cards[i].card_power = user_cards[i].card_power + 5
-            if user_cards[i].card_y == 450 and comp_cards[i].card_suit == user_cards[i].card_suit:
-                comp_cards[i].card_power = comp_cards[i].card_power + 5
+        if user_bura_flag == True:
+            for i in range(len(comp_cards)):
+                if comp_cards[i].card_suit != user_cards[0].card_suit and comp_cards[i].card_suit != koziri:
+                    comp_cards[i].card_power = 0
+        if comp_bura_flag == True:
+             for i in range(len(user_cards)):
+                if user_cards[i].card_suit != comp_cards[0].card_suit and user_cards[i].card_suit != koziri:
+                    user_cards[i].card_power = 0
+        else:
+            for i in range(len(user_cards)):
+                if user_cards[i].card_suit == koziri:
+                    if user_cards[i].card_power < 20:
+                        user_cards[i].card_power = user_cards[i].card_power * 20
+                if comp_cards[i].card_suit == koziri:
+                    if comp_cards[i].card_power < 20:
+                        comp_cards[i].card_power = comp_cards[i].card_power * 20
+                if user_cards[i].card_y == 450 and user_cards[i].card_suit != koziri:
+                    suit = user_cards[i].card_suit
+                    if user_cards[i].card_power < 6:
+                        user_cards[i].card_power = user_cards[i].card_power + 5
+            for i in range(len(user_cards)):
+                if comp_cards[i].card_suit == suit:
+                    if comp_cards[i].card_power < 6:
+                        comp_cards[i].card_power = comp_cards[i].card_power + 5
     else:
-         for i in range(len(comp_cards)):
-            if user_cards[i].card_suit == koziri:
-                if user_cards[i].card_power < 20:
-                    user_cards[i].card_power = user_cards[i].card_power * 20
-            if comp_cards[i].card_suit == koziri:
-                if comp_cards[i].card_power < 20:
-                    comp_cards[i].card_power = comp_cards[i].card_power * 20
-            if comp_cards[i].card_clicked == True and comp_cards[i].card_suit != koziri:
-                comp_cards[i].card_power = comp_cards[i].card_power + 5
-            if comp_cards[i].card_clicked == True and comp_cards[i].card_suit == user_cards[i].card_suit:
-                user_cards[i].card_power = user_cards[i].card_power + 5
+        if comp_bura_flag == True:
+            for i in range(len(user_cards)):
+                if user_cards[i].card_suit != comp_cards[0].card_suit and user_cards[i].card_suit != koziri:
+                    user_cards[i].card_power = 0
+        if user_bura_flag == True:
+            for i in range(len(comp_cards)):
+                if comp_cards[i].card_suit != user_cards[0].card_suit and comp_cards[i].card_suit != koziri:
+                    comp_cards[i].card_power = 0
+        else:
+            for i in range(len(comp_cards)):
+                if user_cards[i].card_suit == koziri:
+                    if user_cards[i].card_power < 20:
+                        user_cards[i].card_power = user_cards[i].card_power * 20
+                if comp_cards[i].card_suit == koziri:
+                    if comp_cards[i].card_power < 20:
+                        comp_cards[i].card_power = comp_cards[i].card_power * 20
+                if comp_cards[i].card_clicked == True and comp_cards[i].card_suit != koziri:
+                    suit = comp_cards[i].card_suit 
+                    if comp_cards[i].card_power < 6:
+                        comp_cards[i].card_power = comp_cards[i].card_power + 5
+            for i in range(len(comp_cards)):
+                if user_cards[i].card_suit == suit:
+                    if user_cards[i].card_power < 6:
+                        user_cards[i].card_power = user_cards[i].card_power + 5 
 def computer_move_on_user_turn():
-    comp_cards[0].card_clicked = True
+    global user_made_move,comp_bura_flag
+    
     update_card_power()
+    user_card_score = []
+    comp_card_score = []
+    card_counter = 0
     
-    
+    for i in range(len(user_cards)):
+        if user_cards[i].card_y == 450:
+            card_counter += 1
+            user_card_score.append(user_cards[i])
+        comp_card_score.append(comp_cards[i].card_power)
+    #one card was played
+    if len(comp_cards) == 3:
+        if card_counter == 1:
+            if user_card_score[0].card_value > 9 and user_card_score[0].card_suit != koziri:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                    comp_cards[2].card_clicked = True
+                    user_made_move = False
+                    comp_bura_flag = True
+                    update_card_power()
+                    
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_power > user_card_score[0].card_power :
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_power > user_card_score[0].card_power:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_power > user_card_score[0].card_power:
+                    comp_cards[0].card_clicked = True
+                elif comp_cards[0].card_power > user_card_score[0].card_power and comp_cards[1].card_power > user_card_score[0].card_power:
+                    if comp_cards[0].card_power > comp_cards[1].card_power:
+                         comp_cards[0].card_clicked = True
+                    else:
+                         comp_cards[1].card_clicked = True
+                elif comp_cards[0].card_power > user_card_score[0].card_power and comp_cards[2].card_power > user_card_score[0].card_power:
+                    if comp_cards[0].card_power > comp_cards[2].card_power:
+                         comp_cards[0].card_clicked = True
+                    else:
+                         comp_cards[2].card_clicked = True
+                elif comp_cards[1].card_power > user_card_score[0].card_power and comp_cards[2].card_power > user_card_score[0].card_power:
+                    if comp_cards[1].card_power > comp_cards[2].card_power:
+                         comp_cards[1].card_clicked = True
+                    else:
+                         comp_cards[2].card_clicked = True
+                elif comp_cards[0].card_power > user_card_score[0].card_power or comp_cards[1].card_power > user_card_score[0].card_power or comp_cards[2].card_power > user_card_score[0].card_power:
+                    if comp_cards[0].card_power > user_card_score[0].card_power:
+                        comp_cards[0].card_clicked = True
+                    elif comp_cards[1].card_power > user_card_score[0].card_power:
+                        comp_cards[0].card_clicked = True
+                    else:
+                        comp_cards[2].card_clicked = True
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_value < 10:
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_value < 10:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_value < 10:
+                    comp_cards[0].card_clicked = True
+                else:
+                    min = 0
+                    if comp_cards[0].card_value > comp_cards[1].card_value and comp_cards[1].card_value < comp_cards[2].card_value:
+                        min = 1
+                    if comp_cards[0].card_value > comp_cards[2].card_value and comp_cards[2].card_value < comp_cards[1].card_value:
+                        min = 2
+                    comp_cards[min].card_clicked = True
+            elif user_card_score[0].card_value > 9 and user_card_score[0].card_suit == koziri:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                    comp_cards[2].card_clicked = True
+                    user_made_move = False
+                    comp_bura_flag = True
+                elif comp_cards[0].card_power > user_card_score[0].card_power or comp_cards[1].card_power > user_card_score[0].card_power or comp_cards[2].card_power > user_card_score[0].card_power:
+                    if comp_cards[0].card_power > user_card_score[0].card_power:
+                        comp_cards[0].card_clicked = True
+                    elif comp_cards[1].card_power > user_card_score[0].card_power:
+                        comp_cards[0].card_clicked = True
+                    else:
+                        comp_cards[2].card_clicked = True
+                else:
+                    min = 0
+                    if comp_cards[0].card_value > comp_cards[1].card_value and comp_cards[1].card_value < comp_cards[2].card_value:
+                        min = 1
+                    if comp_cards[0].card_value > comp_cards[2].card_value and comp_cards[2].card_value < comp_cards[1].card_value:
+                        min = 2
+                    comp_cards[min].card_clicked = True
+            elif user_card_score[0].card_value < 9 and user_card_score[0].card_suit != koziri:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                    comp_cards[2].card_clicked = True
+                    user_made_move = False
+                    comp_bura_flag = True
+                    update_card_power()
+                elif comp_cards[0].card_suit == user_card_score[0].card_suit and comp_cards[0].card_value > 9:
+                     comp_cards[0].card_clicked = True
+                elif comp_cards[1].card_suit == user_card_score[0].card_suit and comp_cards[1].card_value > 9:
+                     comp_cards[1].card_clicked = True
+                elif comp_cards[2].card_suit == user_card_score[0].card_suit and comp_cards[2].card_value > 9:
+                     comp_cards[2].card_clicked = True
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_power > user_card_score[0].card_power :
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_power > user_card_score[0].card_power:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_power > user_card_score[0].card_power:
+                    comp_cards[0].card_clicked = True
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_value < 10:
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_value < 10:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_value < 10:
+                    comp_cards[0].card_clicked = True
+                else:
+                    min = 0
+                    if comp_cards[0].card_value > comp_cards[1].card_value and comp_cards[1].card_value < comp_cards[2].card_value:
+                        min = 1
+                    if comp_cards[0].card_value > comp_cards[2].card_value and comp_cards[2].card_value < comp_cards[1].card_value:
+                        min = 2
+                    comp_cards[min].card_clicked = True
+            else:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                    comp_cards[2].card_clicked = True
+                    user_made_move = False
+                    comp_bura_flag = True
+                    update_card_power()
+                    
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_power > user_card_score[0].card_power :
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_power > user_card_score[0].card_power:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_power > user_card_score[0].card_power:
+                    comp_cards[0].card_clicked = True
+                elif comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[2].card_value < 10:
+                    comp_cards[2].card_clicked = True
+                elif  comp_cards[0].card_suit == comp_cards[2].card_suit and comp_cards[1].card_value < 10:
+                    comp_cards[1].card_clicked = True
+                elif comp_cards[1].card_suit == comp_cards[2].card_suit and comp_cards[0].card_value < 10:
+                    comp_cards[0].card_clicked = True
+                else:
+                    min = 0
+                    if comp_cards[0].card_value > comp_cards[1].card_value and comp_cards[1].card_value < comp_cards[2].card_value:
+                        min = 1
+                    if comp_cards[0].card_value > comp_cards[2].card_value and comp_cards[2].card_value < comp_cards[1].card_value:
+                        min = 2
+                    comp_cards[min].card_clicked = True
+        elif card_counter == 3:
+            comp_cards[0].card_clicked = True
+            comp_cards[1].card_clicked = True
+            comp_cards[2].card_clicked = True
+            
+        else:
+            if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                    comp_cards[2].card_clicked = True
+                    user_made_move = False
+                    comp_bura_flag = True
+                    update_card_power()
+            comp_cards[0].card_clicked = True
+            comp_cards[1].card_clicked = True
 def computer_move_on_comp_turn():
-    global computer_made_move
+    global computer_made_move,user_bura_flag,comp_bura_flag
     if turn == False:
-        comp_cards[0].card_clicked = True
-        update_card_power()
-        coordinate_update(comp_cards,False)
-        computer_made_move = True
+        if user_bura_flag == True:
+             comp_cards[0].card_clicked = True
+             comp_cards[1].card_clicked = True
+             comp_cards[2].card_clicked = True
+             update_card_power()
+             coordinate_update(comp_cards,False)
+             computer_made_move = True
+             
+        else:
+           # if len(comp_cards) == 3:
+            if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                        comp_cards[0].card_clicked = True
+                        comp_cards[1].card_clicked = True
+                        comp_cards[2].card_clicked = True
+                        comp_bura_flag = True
+                        update_card_power()
+                        coordinate_update(comp_cards,False)
+                        computer_made_move = True
+
+            else:        
+                comp_cards[0].card_clicked = True
+                update_card_power()
+                coordinate_update(comp_cards,False)
+                computer_made_move = True
 def coordinate_update(list,bool1):
     if bool1 == True:
         for i in range(len(list)):
@@ -340,7 +589,8 @@ def coordinate_update(list,bool1):
                 list[i].card_y = 650
 
 def process():
-    global turn,comp_score,user_score
+    global turn,comp_score,user_score,user_bura_flag,comp_bura_flag
+    print("WHO TAKES CARDS:",who_takes_cards())
     if who_takes_cards() == True:
         turn = True
         for i in range(len(user_cards)):
@@ -366,20 +616,26 @@ def process():
             user_cards.pop(i)
         if comp_cards[i].card_clicked == True:
             comp_cards.pop(i)
-   
-    Update_cards(user_cards,comp_cards)
+    if user_bura_flag == True or comp_bura_flag == True:
+        user_bura_flag = False
+        comp_bura_flag = False
+    if len(card_Deck) != 0:
+        Update_cards(user_cards,comp_cards)
 
 def user_cards_render(list):
+    x_coordinate = 300
     for i in range(len(list)):
-        Screen.blit(list[i].card_image,(list[i].card_x,list[i].card_y))        
-        
+        Screen.blit(list[i].card_image,(x_coordinate,list[i].card_y))        
+        x_coordinate += 100
     
 def comp_cards_render(list):
-    for i in range(len(list)):  
-        Screen.blit(comp_cards[i].card_image,(list[i].card_x,comp_cards[i].card_y-450))         
-        
+    x_coordinate = 300
+    for i in range(len(list)):           
+       
+        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
+        x_coordinate += 100
   
-
+    
 
 
 Surface = pygame.Surface((1200,800))
@@ -423,20 +679,23 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
            if event.button == 1:
                if 523 <= mouse[0] <= 615 and 677 <= mouse[1] <= 738:
-                   print("clicked at 523")
-                      
-                     
+                   print("clicked at 523-----")
+                   print("USER SCORE:",user_score)
+                   print("COMP SCORE:",comp_score)
+                   card_print()
+                   print("TURN:",turn)
                if 400 <= mouse[0] <= 492 and 678 <= mouse[1] <= 740:  
                    print(check_move())
                    if check_move() == True:
                       user_made_move = True
-                      if turn == True:
+                      if turn == True and comp_bura_flag == False:
                         computer_move_on_user_turn()
                         coordinate_update(comp_cards,False)
                         computer_made_move = True
-                      coordinate_update(user_cards,True)
-                      
-                      
+                      if comp_bura_flag == True:
+                          coordinate_update(comp_cards,False)
+                          computer_made_move = True   
+                      coordinate_update(user_cards,True) 
                    else:
                        user_cards[0].card_y = 500
                        user_cards[1].card_y = 500
@@ -470,16 +729,6 @@ while True:
     computer_move_on_comp_turn()
     user_cards_render(user_cards)
     comp_cards_render(comp_cards)
-    if user_score > 30 or comp_score > 30:
-        if user_score > 30:
-            pass
-           # print("user wins")
-           # print("Score:",user_score)
-        else:
-            pass
-           # print("comp wins")
-            #print("Score:",comp_score)
-    print("Comp:",comp_cards[0].card_power)
-    print("User:",user_cards[0].card_power)      
+        
     pygame.display.update()
     fps.tick(60)
