@@ -271,14 +271,14 @@ def check_move():
 
 shuffle()
 koziri = 'H'
-comp_cards = [A_D,Q_D,K_D]
-user_cards = [A_C,Q_H,H_1]
+comp_cards = [A_D,A_H,K_H]
+user_cards = [J_D,Q_C,K_D]
 card_Deck.remove(A_D)
-card_Deck.remove(Q_D)
+card_Deck.remove(J_D)
+card_Deck.remove(A_H)
+card_Deck.remove(K_H)
+card_Deck.remove(Q_C)
 card_Deck.remove(K_D)
-card_Deck.remove(A_C)
-card_Deck.remove(Q_H)
-card_Deck.remove(H_1)
 #Update_cards(user_cards,comp_cards)
 
 
@@ -388,6 +388,7 @@ def update_card_power():
                 if user_cards[i].card_suit == suit:
                     if user_cards[i].card_power < 6:
                         user_cards[i].card_power = user_cards[i].card_power + 5 
+
 def computer_move_on_user_turn():
     global user_made_move,comp_bura_flag
     
@@ -549,8 +550,75 @@ def computer_move_on_user_turn():
                     user_made_move = False
                     comp_bura_flag = True
                     update_card_power()
-            comp_cards[0].card_clicked = True
-            comp_cards[1].card_clicked = True
+            else:
+                #comp_cards[0].card_clicked = True
+                #comp_cards[1].card_clicked = True
+
+                # sort user card by power
+                sum_of_user_score = user_card_score[0].card_power + user_card_score[1].card_power             
+                if user_card_score[0].card_power > user_card_score[1].card_power:
+                    tmp = user_card_score[0].card_power
+                    user_card_score[0].card_power = user_card_score[1].card_power
+                    user_card_score[1].card_power = tmp
+                for i in range(len(comp_card_score)):
+                    if comp_card_score[i] > user_card_score[1].card_power and comp_card_score[i] > 19:
+                        comp_card_score[i] = user_card_score[1].card_power + 1
+                sum_of_user_score = user_card_score[0].card_power + user_card_score[1].card_power
+                comp_card_score.sort()
+                comp_sum_min = comp_card_score[0] + comp_card_score[1]
+                comp_sum_mid = comp_card_score[0] + comp_card_score[2]
+                comp_sum_max = comp_card_score[1] + comp_card_score[2]
+                # if comp_card len == 3 
+                if comp_sum_min > sum_of_user_score:
+                    print("YVELANAIRAD MIMAQ")
+                    click_counter = 0 
+                    for i in range(len(comp_cards)):
+                        if click_counter == 2:
+                            break
+                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_value > 9:
+                            comp_cards[i].card_clicked = True
+                            click_counter += 1 
+                    for i in range(len(comp_cards)):
+                        if click_counter == 2:
+                            break
+                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_value < 9:
+                            comp_cards[i].card_clicked = True
+                            click_counter += 1
+                    for i in range(len(comp_cards)):
+                        if click_counter == 2:
+                            break
+                        if comp_cards[i].card_suit == koziri:
+                            comp_cards[i].card_clicked = True
+                            click_counter += 1
+                elif comp_sum_mid > sum_of_user_score:
+                    print("ORNAIRAD MIMAQ")
+                    click_counter2 = 0 
+                    for i in range(len(user_cards)):
+                        if click_counter2 == 2:
+                            break
+                        if comp_cards[i].comp_suit != koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].comp_suit != koziri and comp_cards[i].card_power > user_card_score[1].card_power:
+                            comp_cards[i].card_clicked = True
+                            click_counter2 += 1
+                        elif comp_cards[i].comp_suit == koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].comp_suit == koziri and comp_cards[i].card_power > user_card_score[1].card_power:
+                            comp_cards[i].card_clicked = True
+                            click_counter2 += 1
+                elif comp_sum_max > sum_of_user_score:
+                    print("MXOLOD ERTI GZIT MIMAQ")
+                    if comp_cards[0].card_power > user_card_score[0].card_power or   comp_cards[0].card_power > user_card_score[1].card_power:
+                        comp_cards[0].card_clicked = True
+                    if comp_cards[1].card_power > user_card_score[0].card_power or   comp_cards[1].card_power > user_card_score[1].card_power:
+                        comp_cards[1].card_clicked = True
+                    if comp_cards[2].card_power > user_card_score[0].card_power or   comp_cards[2].card_power > user_card_score[1].card_power:
+                        comp_cards[2].card_clicked = True
+                else:
+                    print("AR SHEMIDZLIA WAVIGO")
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+
+                
+                    
+                
+
 def computer_move_on_comp_turn():
     global computer_made_move,user_bura_flag,comp_bura_flag
     if turn == False:
@@ -578,6 +646,7 @@ def computer_move_on_comp_turn():
                 update_card_power()
                 coordinate_update(comp_cards,False)
                 computer_made_move = True
+
 def coordinate_update(list,bool1):
     if bool1 == True:
         for i in range(len(list)):
@@ -630,8 +699,14 @@ def user_cards_render(list):
     
 def comp_cards_render(list):
     x_coordinate = 300
-    for i in range(len(list)):           
-       
+    for i in range(len(list)): 
+        #if turn == True:          
+            #if comp_cards[i].card_y == 650 and who_takes_cards() == False:
+                #comp_cards[i].card_image_back = comp_cards[i].card_image
+        #else:
+            #if comp_cards[i].card_y == 650:
+                #comp_cards[i].card_image_back = comp_cards[i].card_image
+        #Screen.blit(comp_cards[i].card_image_back,(x_coordinate,comp_cards[i].card_y-450))
         Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
         x_coordinate += 100
   
