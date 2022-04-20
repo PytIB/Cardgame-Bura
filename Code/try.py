@@ -271,12 +271,12 @@ def check_move():
 
 shuffle()
 koziri = 'H'
-comp_cards = [A_D,A_H,K_H]
+comp_cards = [A_D,A_H,D_1]
 user_cards = [J_D,Q_C,K_D]
 card_Deck.remove(A_D)
 card_Deck.remove(J_D)
 card_Deck.remove(A_H)
-card_Deck.remove(K_H)
+card_Deck.remove(D_1)
 card_Deck.remove(Q_C)
 card_Deck.remove(K_D)
 #Update_cards(user_cards,comp_cards)
@@ -565,6 +565,7 @@ def computer_move_on_user_turn():
                         comp_card_score[i] = user_card_score[1].card_power + 1
                 sum_of_user_score = user_card_score[0].card_power + user_card_score[1].card_power
                 comp_card_score.sort()
+                
                 comp_sum_min = comp_card_score[0] + comp_card_score[1]
                 comp_sum_mid = comp_card_score[0] + comp_card_score[2]
                 comp_sum_max = comp_card_score[1] + comp_card_score[2]
@@ -575,21 +576,22 @@ def computer_move_on_user_turn():
                     for i in range(len(comp_cards)):
                         if click_counter == 2:
                             break
-                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_value > 9:
+                        if comp_cards[i].card_value > 9 and comp_cards[i].card_suit != koziri:
+                            comp_cards[i].card_clicked = True
+                            click_counter += 1
+                        elif comp_cards[i].card_value < 9 and comp_cards[i].card_suit != koziri:
                             comp_cards[i].card_clicked = True
                             click_counter += 1 
-                    for i in range(len(comp_cards)):
-                        if click_counter == 2:
-                            break
-                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_value < 9:
-                            comp_cards[i].card_clicked = True
-                            click_counter += 1
-                    for i in range(len(comp_cards)):
-                        if click_counter == 2:
-                            break
-                        if comp_cards[i].card_suit == koziri:
-                            comp_cards[i].card_clicked = True
-                            click_counter += 1
+                        else:
+                            if comp_cards[i].card_suit == koziri and i == 1 or comp_cards[i].card_suit == koziri and i == 0:
+                                if comp_cards[i+1].card_suit != koziri:
+                                    i = i+1
+                                else:
+                                    comp_cards[i].card_clicked = True
+                                    click_counter += 1 
+
+                        
+                    
                 elif comp_sum_mid > sum_of_user_score:
                     print("ORNAIRAD MIMAQ")
                     click_counter2 = 0 
