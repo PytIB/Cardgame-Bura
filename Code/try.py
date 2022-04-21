@@ -88,7 +88,8 @@ clubs = pygame.transform.scale(clubs,(60,60))
 heart = pygame.image.load('Cardgame-Bura\Code\PNG\\heart1.png').convert_alpha()
 heart = pygame.transform.scale(heart,(60,60))
 font = pygame.font.Font('freesansbold.ttf', 32)
-text = font.render('YOU LOST', True, ('black'))
+text_lost = font.render('YOU LOST', True, ('black'))
+text_won = font.render('YOU WON', True, ('black'))
 
 
 fps = pygame.time.Clock()
@@ -139,6 +140,7 @@ user_made_move = False
 computer_made_move = False
 user_cards_taken = []
 comp_cards_taken = []
+comp_trump_counter = 0
 user_score = 0
 comp_score = 0
 user_cards = []
@@ -271,16 +273,21 @@ def check_move():
 
 
 shuffle()
-koziri = 'H'
-comp_cards = [K_D,A_H,D_1]
-user_cards = [J_D,Q_C,A_D]
-card_Deck.remove(A_D)
-card_Deck.remove(J_D)
-card_Deck.remove(A_H)
-card_Deck.remove(D_1)
-card_Deck.remove(Q_C)
-card_Deck.remove(K_D)
-#Update_cards(user_cards,comp_cards)
+koziri = kozir()
+Update_cards(user_cards,comp_cards)
+
+# TEST 
+#koziri = 'H'
+#comp_cards = [K_D,A_H,D_1]
+#user_cards = [J_D,Q_C,A_D]
+#card_Deck.remove(A_D)
+#card_Deck.remove(J_D)
+#card_Deck.remove(Q_C)
+
+#card_Deck.remove(D_1)
+#card_Deck.remove(A_H)
+#card_Deck.remove(K_D)
+
 
 
 
@@ -554,28 +561,46 @@ def computer_move_on_user_turn():
             else:
                 #comp_cards[0].card_clicked = True
                 #comp_cards[1].card_clicked = True
-
+                nothing_works = False
+                one_combo_works = False
+                every_combo_works = False
+                two_combo_works = False
                 # sort user card by power
-                sum_of_user_score = user_card_score[0].card_power + user_card_score[1].card_power             
+                            
                 if user_card_score[0].card_power > user_card_score[1].card_power:
                     tmp = user_card_score[0].card_power
                     user_card_score[0].card_power = user_card_score[1].card_power
                     user_card_score[1].card_power = tmp
-                for i in range(len(comp_card_score)):
-                    if comp_card_score[i] > user_card_score[1].card_power and comp_card_score[i] > 19:
-                        comp_card_score[i] = user_card_score[1].card_power + 1
-                sum_of_user_score = user_card_score[0].card_power + user_card_score[1].card_power
                 comp_card_score.sort()
+                #logic to find how many ways are there to take the cards
+                if comp_card_score[0] > user_card_score[0].card_power:
+                    if comp_card_score[0] > user_card_score[1].card_power:
+                        every_combo_works = True
+                    else:
+                        if comp_card_score[1] > user_card_score[1].card_power:
+                            every_combo_works = True
+                        else:
+                            if comp_card_score[2] > user_card_score[1].card_power:
+                                two_combo_works = True
+                            else:
+                                nothing_works = True
+                else:
+                    if comp_card_score[1] > user_card_score[0].card_power:
+                        if comp_card_score[2] > user_card_score[1].card_power:
+                            one_combo_works = True
+                        else:
+                            nothing_works = True
+                    else:
+                        nothing_works = True
+
                 
-                comp_sum_min = comp_card_score[0] + comp_card_score[1]
-                comp_sum_mid = comp_card_score[0] + comp_card_score[2]
-                comp_sum_max = comp_card_score[1] + comp_card_score[2]
-                print("SUM_USER:",sum_of_user_score)
-                print("SUM_MIN:",comp_sum_min)
-                print("SUM_MID:",comp_sum_mid)
-                print("SUM_MAX:",comp_sum_max)
+                
+                print("ONLY_ONE_WAY:",one_combo_works)
+                print("TWO_WAYS:",two_combo_works)
+                print("EVERYTHING WORKS:",every_combo_works)
+                print("NOTHING WORKS:",nothing_works,"\n")
                 # if comp_card len == 3 
-                if comp_sum_min > sum_of_user_score:
+                if every_combo_works == True:
                     print("YVELANAIRAD MIMAQ")
                     click_counter = 0 
                     for i in range(len(comp_cards)):
@@ -597,19 +622,20 @@ def computer_move_on_user_turn():
 
                         
                     
-                elif comp_sum_mid > sum_of_user_score:
+                elif two_combo_works == True:
+                    # araa sruli 
                     print("ORNAIRAD MIMAQ")
                     click_counter2 = 0 
                     for i in range(len(user_cards)):
                         if click_counter2 == 2:
                             break
-                        if comp_cards[i].comp_suit != koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].comp_suit != koziri and comp_cards[i].card_power > user_card_score[1].card_power:
+                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].card_suit != koziri and comp_cards[i].card_power > user_card_score[1].card_power:
                             comp_cards[i].card_clicked = True
                             click_counter2 += 1
-                        elif comp_cards[i].comp_suit == koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].comp_suit == koziri and comp_cards[i].card_power > user_card_score[1].card_power:
+                        elif comp_cards[i].card_suit == koziri and comp_cards[i].card_power > user_card_score[0].card_power or comp_cards[i].card_suit == koziri and comp_cards[i].card_power > user_card_score[1].card_power:
                             comp_cards[i].card_clicked = True
                             click_counter2 += 1
-                elif comp_sum_max > sum_of_user_score:
+                elif one_combo_works == True:
                     print("MXOLOD ERTI GZIT MIMAQ")
                     if comp_cards[0].card_power > user_card_score[0].card_power or   comp_cards[0].card_power > user_card_score[1].card_power:
                         comp_cards[0].card_clicked = True
@@ -619,10 +645,34 @@ def computer_move_on_user_turn():
                         comp_cards[2].card_clicked = True
                 else:
                     print("AR SHEMIDZLIA WAVIGO")
-                    comp_cards[0].card_clicked = True
-                    comp_cards[1].card_clicked = True
+                    card_clicked3 = 0
+                    for i in range(len(comp_cards)):
+                        if card_clicked3 == 2:
+                            break
+                        if comp_cards[i].card_suit != koziri and comp_cards[i].card_value < 10:
+                            comp_cards[i].card_clicked = True
+                            card_clicked3 += 1
+                        elif comp_cards[i].card_suit == koziri and comp_cards[i].card_value > 9:
+                            if i <= 1 and card_clicked3 == 0:
+                                i += 1
+                            else:
+                                comp_cards[i].card_clicked = True
+                                card_clicked3 += 1
+                        else:
+                            if comp_cards[i].card_value < 9:
+                                comp_cards[i].card_clicked = True
+                                card_clicked3 += 1
+                            else:
+                                comp_cards[i].card_clicked = True
+                                card_clicked3 += 1
 
-                
+                        
+def comp_render_var():
+    x_coordinate = 200
+    for i in range(len(comp_cards_taken)):
+        Screen.blit(comp_cards_taken[i].card_image,(x_coordinate,500))
+        x_coordinate += 100
+    Screen.blit(text_lost,(500,200))
                     
                 
 
@@ -648,8 +698,27 @@ def computer_move_on_comp_turn():
                         coordinate_update(comp_cards,False)
                         computer_made_move = True
 
-            else:        
-                comp_cards[0].card_clicked = True
+            else:
+                suit_counter = 0
+                for i in range(len(comp_cards)):
+                    if comp_cards[i].card_suit == koziri and comp_cards[i].card_value > 10 and comp_score >= 17:
+                        comp_cards[i].card_clicked = True
+                        break
+                    elif comp_cards[0].card_suit == comp_cards[1].card_suit:
+                        comp_cards[0].card_clicked = True
+                        comp_cards[1].card_clicked = True
+                        break
+                    elif comp_cards[0].card_suit == comp_cards[2].card_suit:
+                        comp_cards[0].card_clicked = True
+                        comp_cards[2].card_clicked = True
+                        break
+                    elif comp_cards[1].card_suit == comp_cards[2].card_suit:
+                        comp_cards[1].card_clicked = True
+                        comp_cards[2].card_clicked = True
+                        break
+                    else:
+                        comp_cards[i].card_clicked = True
+                        break
                 update_card_power()
                 coordinate_update(comp_cards,False)
                 computer_made_move = True
@@ -665,24 +734,33 @@ def coordinate_update(list,bool1):
                 list[i].card_y = 650
 
 def process():
-    global turn,comp_score,user_score,user_bura_flag,comp_bura_flag
+    global turn,comp_score,user_score,user_bura_flag,comp_bura_flag,comp_trump_counter
     print("WHO TAKES CARDS:",who_takes_cards())
     if who_takes_cards() == True:
         turn = True
         for i in range(len(user_cards)):
             if user_cards[i].card_y == 300:
+                if user_cards[i].card_suit == koziri:
+                    comp_trump_counter += 1
                 user_cards_taken.append(user_cards[i])
                 user_score += user_cards[i].card_value
             if comp_cards[i].card_clicked == True:
+                if comp_cards[i].card_suit == koziri:
+                    comp_trump_counter += 1 
                 user_cards_taken.append(comp_cards[i])
                 user_score += comp_cards[i].card_value
+            
     else:
         turn = False
         for i in range(len(user_cards)):
             if user_cards[i].card_y == 300:
+                if user_cards[i].card_suit == koziri:
+                    comp_trump_counter += 1
                 comp_cards_taken.append(user_cards[i])
                 comp_score += user_cards[i].card_value
             if comp_cards[i].card_clicked == True:
+                if comp_cards[i].card_suit == koziri:
+                    comp_trump_counter += 1 
                 comp_cards_taken.append(comp_cards[i])
                 comp_score += comp_cards[i].card_value
    
@@ -707,15 +785,19 @@ def user_cards_render(list):
 def comp_cards_render(list):
     x_coordinate = 300
     for i in range(len(list)): 
-        #if turn == True:          
-            #if comp_cards[i].card_y == 650 and who_takes_cards() == False:
-                #comp_cards[i].card_image_back = comp_cards[i].card_image
-        #else:
-            #if comp_cards[i].card_y == 650:
-                #comp_cards[i].card_image_back = comp_cards[i].card_image
-        #Screen.blit(comp_cards[i].card_image_back,(x_coordinate,comp_cards[i].card_y-450))
-        Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
+        if turn == True:          
+            if comp_cards[i].card_y == 650 and who_takes_cards() == False:
+                comp_cards[i].card_image_back = comp_cards[i].card_image
+            elif comp_bura_flag == True:
+                comp_cards[i].card_image_back = comp_cards[i].card_image
+        else:
+            if comp_cards[i].card_y == 650:
+                comp_cards[i].card_image_back = comp_cards[i].card_image
+        Screen.blit(comp_cards[i].card_image_back,(x_coordinate,comp_cards[i].card_y-450))
         x_coordinate += 100
+        #TEST
+        #Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
+        #x_coordinate += 100
   
     
 
@@ -809,8 +891,12 @@ while True:
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
     computer_move_on_comp_turn()
-    user_cards_render(user_cards)
-    comp_cards_render(comp_cards)
-        
+    if comp_score < 30:
+        user_cards_render(user_cards)
+        comp_cards_render(comp_cards)
+    else:
+        comp_render_var()
+    if comp_score > 30:
+        print("MORCHA MOGIGE")
     pygame.display.update()
     fps.tick(60)
