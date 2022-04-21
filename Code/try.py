@@ -2,6 +2,7 @@
 import pygame
 import random
 import time
+
 pygame.init()
 
 
@@ -267,12 +268,12 @@ def check_move():
         else:
             return False  
         
-            
+
 
 shuffle()
 koziri = 'H'
-comp_cards = [A_D,A_H,D_1]
-user_cards = [J_D,Q_C,K_D]
+comp_cards = [K_D,A_H,D_1]
+user_cards = [J_D,Q_C,A_D]
 card_Deck.remove(A_D)
 card_Deck.remove(J_D)
 card_Deck.remove(A_H)
@@ -569,6 +570,10 @@ def computer_move_on_user_turn():
                 comp_sum_min = comp_card_score[0] + comp_card_score[1]
                 comp_sum_mid = comp_card_score[0] + comp_card_score[2]
                 comp_sum_max = comp_card_score[1] + comp_card_score[2]
+                print("SUM_USER:",sum_of_user_score)
+                print("SUM_MIN:",comp_sum_min)
+                print("SUM_MID:",comp_sum_mid)
+                print("SUM_MAX:",comp_sum_max)
                 # if comp_card len == 3 
                 if comp_sum_min > sum_of_user_score:
                     print("YVELANAIRAD MIMAQ")
