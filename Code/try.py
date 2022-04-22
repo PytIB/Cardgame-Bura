@@ -734,7 +734,7 @@ def render_win(bool2):
     else:
         x_coordinate = 200
         for i in range(len(comp_cards_taken)):
-            Screen.blit(comp_cards_taken[i].card_image,(x_coordinate,500))
+            Screen.blit(comp_cards_taken[i].card_image,(x_coordinate,300))
             x_coordinate += 100
         if comp_score < 30:
             Screen.blit(text_won,(500,100))
