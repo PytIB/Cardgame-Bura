@@ -1,11 +1,11 @@
 
 import pygame
 import random
-import time
+
 
 pygame.init()
 
-
+pygame.mixer.init()
 # start of deck 
 C10 = pygame.image.load('Cardgame-Bura\Code\PNG\\10C.PNG')
 C10 = pygame.transform.scale(C10,(150,150))
@@ -88,8 +88,11 @@ clubs = pygame.transform.scale(clubs,(60,60))
 heart = pygame.image.load('Cardgame-Bura\Code\PNG\\heart1.png').convert_alpha()
 heart = pygame.transform.scale(heart,(60,60))
 font = pygame.font.Font('freesansbold.ttf', 32)
+font1 = pygame.font.Font('freesansbold.ttf', 16)
 text_lost = font.render('YOU LOST', True, ('black'))
 text_won = font.render('YOU WON', True, ('black'))
+text_button_new_game = font1.render('New Game', True, ('yellow'))
+#mixer.music.load('Cardgame-Bura\whoop.mp3')
 
 
 fps = pygame.time.Clock()
@@ -143,11 +146,55 @@ comp_cards_taken = []
 comp_trump_counter = 0
 user_score = 0
 comp_score = 0
+user_finished_game = False
 user_cards = []
 comp_cards = []
 user_bura_flag = False
 comp_bura_flag = False
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
+
+
+user_won = False
+comp_won = False
+game_over_screen = False
+general_score_user = 0
+general_score_comp = 0
+
+text_user_score = font.render(f'win:{general_score_user}', True, ('black'))
+text_comp_score = font.render(f'win:{general_score_comp}', True, ('black'))
+
+
+
+
+#resets deck objects for new game 
+def new_game_reset_Deck():
+    global card_Deck
+    A_D = Card('A','D',11,5,AD,Red_Back,False,500,300)
+    K_D = Card('K','D',4,3,KD,Red_Back,False,500,300)
+    Q_D = Card('Q','D',3,2,QD,Red_Back,False,500,300)
+    J_D = Card('J','D',2,1,JD,Red_Back,False,500,300)
+    D_1 = Card('1','D',10,4,D10,Red_Back,False,500,300)
+
+    A_H = Card('A','H',11,5,AH,Red_Back,False,500,300)
+    K_H = Card('K','H',4,3,KH,Red_Back,False,500,300)
+    Q_H = Card('Q','H',3,2,QH,Red_Back,False,500,300)
+    J_H = Card('J','H',2,1,JH,Red_Back,False,500,300)
+    H_1 = Card('1','H',10,4,H10,Red_Back,False,500,300)
+
+    A_S = Card('A','S',11,5,AS,Red_Back,False,500,300)
+    K_S = Card('K','S',4,3,KS,Red_Back,False,500,300)
+    Q_S = Card('Q','S',3,2,QS,Red_Back,False,500,300)
+    J_S = Card('J','S',2,1,JS,Red_Back,False,500,300)
+    S_1 = Card('1','S',10,4,S10,Red_Back,False,500,300)
+
+    A_C = Card('A','C',11,5,AC,Red_Back,False,500,300)
+    K_C = Card('K','C',4,3,KC,Red_Back,False,500,300)
+    Q_C = Card('Q','C',3,2,QC,Red_Back,False,500,300)
+    J_C = Card('J','C',2,1,JC,Red_Back,False,500,300)
+    C_1 = Card('1','C',10,4,C10,Red_Back,False,500,300)
+
+    card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]    
+
 def shuffle():
     for n in range(500):
         var1 = random.randint(0,19)
@@ -666,15 +713,39 @@ def computer_move_on_user_turn():
                                 comp_cards[i].card_clicked = True
                                 card_clicked3 += 1
 
-                        
-def comp_render_var():
-    x_coordinate = 200
-    for i in range(len(comp_cards_taken)):
-        Screen.blit(comp_cards_taken[i].card_image,(x_coordinate,500))
-        x_coordinate += 100
-    Screen.blit(text_lost,(500,200))
-                    
-                
+#comp = False -> user = True                      
+def render_win(bool2):
+    global general_score_comp,general_score_user,user_won,comp_won
+    Screen.blit(text_button_new_game,(525,700))
+    if bool2 == True:             
+        x_coordinate = 200
+        for i in range(len(user_cards_taken)):
+            Screen.blit(user_cards_taken[i].card_image,(x_coordinate,300))
+            x_coordinate += 100
+        if user_score < 30:
+            comp_won = True
+            Screen.blit(text_lost,(500,100))
+        else:
+            user_won = True
+            Screen.blit(text_won,(500,100))
+
+        text_score = font.render(f'Score:{user_score}', True, ('black'))
+        Screen.blit(text_score,(520,150))
+    else:
+        x_coordinate = 200
+        for i in range(len(comp_cards_taken)):
+            Screen.blit(comp_cards_taken[i].card_image,(x_coordinate,500))
+            x_coordinate += 100
+        if comp_score < 30:
+            Screen.blit(text_won,(500,100))
+            user_won = True
+            
+        else:
+            Screen.blit(text_lost,(500,100))
+            comp_won = True
+            
+        text_score = font.render(f'Score:{comp_score}', True, ('black'))
+        Screen.blit(text_score,(520,150))     
 
 def computer_move_on_comp_turn():
     global computer_made_move,user_bura_flag,comp_bura_flag
@@ -798,9 +869,32 @@ def comp_cards_render(list):
         #TEST
         #Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
         #x_coordinate += 100
-  
-    
 
+def start_new_game():
+    global comp_won,user_won,turn,user_finished_game,user_cards,user_cards_taken,comp_cards,comp_cards_taken,user_score,comp_score,user_bura_flag,comp_bura_flag,game_over_screen,card_Deck,koziri
+    user_finished_game = False
+    if user_won == True:
+        turn = True
+    else:
+        turn = False
+    user_cards = []
+    user_cards_taken = []
+    user_score = 0
+    user_won = False
+
+    comp_cards = []
+    comp_cards_taken = []
+    comp_score = 0 
+    comp_won = False
+
+    user_bura_flag = False
+    comp_bura_flag = False
+    game_over_screen = False
+    
+    new_game_reset_Deck()
+    shuffle()
+    koziri = kozir()
+    Update_cards(user_cards,comp_cards)
 
 Surface = pygame.Surface((1200,800))
 Surface.fill((175,215,70))
@@ -832,7 +926,7 @@ Surface.fill((175,215,70))
 
 while True:
     if user_made_move == True and computer_made_move == True:
-        pygame.time.wait(750)
+        pygame.time.wait(950)
         process()
         user_made_move = False
         computer_made_move = False
@@ -843,10 +937,22 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
            if event.button == 1:
                if 523 <= mouse[0] <= 615 and 677 <= mouse[1] <= 738:
-                   print("clicked at 523-----")
-                   print("USER SCORE:",user_score)
-                   print("COMP SCORE:",comp_score)
-                   card_print()
+                   if game_over_screen == True:
+                       print("NEW GAME STARTS")
+                       if comp_won == True:
+                           general_score_comp +=1
+                       if user_won == True:
+                           general_score_user += 1
+                       start_new_game()
+                       card_print()
+                       print("LEN DECK:",len(card_Deck))
+                   elif turn == True:
+                        user_finished_game = True
+                   else:
+                       print("NOT YOUR TURN")
+                       print("USER_SCORE:",user_score)
+                       print("comp_score",comp_score)
+                       card_print()
                    print("TURN:",turn)
                if 400 <= mouse[0] <= 492 and 678 <= mouse[1] <= 740:  
                    print(check_move())
@@ -890,13 +996,20 @@ while True:
     kozir_render()
     Screen.blit(button2,(400,660))
     Screen.blit(button2,(520,660))
+    text_user_score = font.render(f'win:{general_score_user}', True, ('black'))
+    text_comp_score = font.render(f'win:{general_score_comp}', True, ('black'))
+    Screen.blit(text_user_score,(1000,550))
+    Screen.blit(text_comp_score,(1000,100))
     computer_move_on_comp_turn()
-    if comp_score < 30:
+    if comp_score < 30 and user_finished_game == False:
         user_cards_render(user_cards)
         comp_cards_render(comp_cards)
+    elif user_finished_game == True:
+        render_win(True)
+        game_over_screen = True
     else:
-        comp_render_var()
-    if comp_score > 30:
-        print("MORCHA MOGIGE")
+        render_win(False)
+        game_over_screen = True
+    
     pygame.display.update()
     fps.tick(60)
