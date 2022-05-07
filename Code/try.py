@@ -1,4 +1,5 @@
 
+from numpy import true_divide
 import pygame
 import random
 
@@ -149,6 +150,7 @@ comp_score = 0
 user_finished_game = False
 user_cards = []
 comp_cards = []
+comp_temp_score  = 0
 user_bura_flag = False
 comp_bura_flag = False
 card_Deck = [A_D,K_D,Q_D,J_D,D_1,A_H,K_H,Q_H,J_H,H_1,A_S,K_S,Q_S,J_S,S_1,A_C,K_C,Q_C,J_C,C_1]
@@ -367,6 +369,7 @@ def who_takes_cards():
             else:
                 return False
        else:
+           #bug 
             if comp_card_values[0] > user_card_values[0] and comp_card_values[1] > user_card_values[1]:
                 return False
             else:
@@ -712,7 +715,23 @@ def computer_move_on_user_turn():
                             else:
                                 comp_cards[i].card_clicked = True
                                 card_clicked3 += 1
+    elif len(comp_cards ) == 2:
+        if card_counter == 2:
+            comp_cards[0].card_clicked = True
+            comp_cards[1].card_clicked = True
+        else:
+            if comp_card_score[0] > user_card_score[0].card_power:
+                comp_cards[0].card_clicked = True
+            elif comp_card_score[1] > user_card_score[0].card_power:
+                comp_cards[1].card_clicked = True
+            else:
+                if comp_card_score[0] < comp_card_score[1]:
+                    comp_cards[0].card_clicked = True
+                else:
+                    comp_cards[1].card_clicked = True
 
+    else:
+        comp_cards[0].card_clicked = True
 #comp = False -> user = True                      
 def render_win(bool2):
     global general_score_comp,general_score_user,user_won,comp_won
@@ -759,40 +778,48 @@ def computer_move_on_comp_turn():
              computer_made_move = True
              
         else:
-           # if len(comp_cards) == 3:
-            if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
-                        comp_cards[0].card_clicked = True
-                        comp_cards[1].card_clicked = True
-                        comp_cards[2].card_clicked = True
-                        comp_bura_flag = True
-                        update_card_power()
-                        coordinate_update(comp_cards,False)
-                        computer_made_move = True
+            if len(comp_cards) == 3:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit and comp_cards[0].card_suit == comp_cards[2].card_suit:
+                            comp_cards[0].card_clicked = True
+                            comp_cards[1].card_clicked = True
+                            comp_cards[2].card_clicked = True
+                            comp_bura_flag = True
+                            update_card_power()
+                            coordinate_update(comp_cards,False)
+                            computer_made_move = True
 
+                else:
+                    suit_counter = 0
+                    for i in range(len(comp_cards)):
+                        if comp_cards[i].card_suit == koziri and comp_cards[i].card_value > 10 and comp_score >= 17:
+                            comp_cards[i].card_clicked = True
+                            break
+                        elif comp_cards[0].card_suit == comp_cards[1].card_suit:
+                            comp_cards[0].card_clicked = True
+                            comp_cards[1].card_clicked = True
+                            break
+                        elif comp_cards[0].card_suit == comp_cards[2].card_suit:
+                            comp_cards[0].card_clicked = True
+                            comp_cards[2].card_clicked = True
+                            break
+                        elif comp_cards[1].card_suit == comp_cards[2].card_suit:
+                            comp_cards[1].card_clicked = True
+                            comp_cards[2].card_clicked = True
+                            break
+                        else:
+                            comp_cards[i].card_clicked = True
+                            break
+            elif len(comp_cards) == 2:
+                if comp_cards[0].card_suit == comp_cards[1].card_suit:
+                    comp_cards[0].card_clicked = True
+                    comp_cards[1].card_clicked = True
+                else:
+                    comp_cards[0].card_clicked = True
             else:
-                suit_counter = 0
-                for i in range(len(comp_cards)):
-                    if comp_cards[i].card_suit == koziri and comp_cards[i].card_value > 10 and comp_score >= 17:
-                        comp_cards[i].card_clicked = True
-                        break
-                    elif comp_cards[0].card_suit == comp_cards[1].card_suit:
-                        comp_cards[0].card_clicked = True
-                        comp_cards[1].card_clicked = True
-                        break
-                    elif comp_cards[0].card_suit == comp_cards[2].card_suit:
-                        comp_cards[0].card_clicked = True
-                        comp_cards[2].card_clicked = True
-                        break
-                    elif comp_cards[1].card_suit == comp_cards[2].card_suit:
-                        comp_cards[1].card_clicked = True
-                        comp_cards[2].card_clicked = True
-                        break
-                    else:
-                        comp_cards[i].card_clicked = True
-                        break
-                update_card_power()
-                coordinate_update(comp_cards,False)
-                computer_made_move = True
+                comp_cards[0].card_clicked = True
+            update_card_power()
+            coordinate_update(comp_cards,False)
+            computer_made_move = True
 
 def coordinate_update(list,bool1):
     if bool1 == True:
@@ -805,8 +832,9 @@ def coordinate_update(list,bool1):
                 list[i].card_y = 650
 
 def process():
-    global turn,comp_score,user_score,user_bura_flag,comp_bura_flag,comp_trump_counter
-    print("WHO TAKES CARDS:",who_takes_cards())
+    global turn,comp_score,user_score,user_bura_flag,comp_bura_flag,comp_trump_counter,comp_temp_score
+    temp_turn = turn
+    print("WHOS TURN IT WAS FINDING OUT AEE",temp_turn)
     if who_takes_cards() == True:
         turn = True
         for i in range(len(user_cards)):
@@ -828,12 +856,15 @@ def process():
                 if user_cards[i].card_suit == koziri:
                     comp_trump_counter += 1
                 comp_cards_taken.append(user_cards[i])
+                if temp_turn == True:
+                    comp_temp_score += user_cards[i].card_value
                 comp_score += user_cards[i].card_value
             if comp_cards[i].card_clicked == True:
                 if comp_cards[i].card_suit == koziri:
                     comp_trump_counter += 1 
                 comp_cards_taken.append(comp_cards[i])
                 comp_score += comp_cards[i].card_value
+                comp_temp_score += comp_cards[i].card_value
    
 
     for i in reversed(range(len(user_cards))):
@@ -870,8 +901,18 @@ def comp_cards_render(list):
         #Screen.blit(comp_cards[i].card_image,(x_coordinate,comp_cards[i].card_y-450))
         #x_coordinate += 100
 
+
+def comp_finished_game():
+    if len(comp_cards_taken) == 6 and comp_temp_score > 23:
+        return True
+    if len(comp_cards_taken) > 7:
+        return True
+    if len(comp_cards_taken) < 6 and comp_temp_score > 25:
+        return True
+
+    return False
 def start_new_game():
-    global comp_won,user_won,turn,user_finished_game,user_cards,user_cards_taken,comp_cards,comp_cards_taken,user_score,comp_score,user_bura_flag,comp_bura_flag,game_over_screen,card_Deck,koziri
+    global comp_won,user_won,turn,user_finished_game,user_cards,user_cards_taken,comp_cards,comp_cards_taken,user_score,comp_score,user_bura_flag,comp_bura_flag,game_over_screen,card_Deck,koziri,comp_temp_score
     user_finished_game = False
     if user_won == True:
         turn = True
@@ -886,7 +927,7 @@ def start_new_game():
     comp_cards_taken = []
     comp_score = 0 
     comp_won = False
-
+    comp_temp_score = 0 
     user_bura_flag = False
     comp_bura_flag = False
     game_over_screen = False
@@ -926,7 +967,7 @@ Surface.fill((175,215,70))
 
 while True:
     if user_made_move == True and computer_made_move == True:
-        pygame.time.wait(950)
+        pygame.time.wait(1400)
         process()
         user_made_move = False
         computer_made_move = False
@@ -945,11 +986,15 @@ while True:
                            general_score_user += 1
                        start_new_game()
                        card_print()
+                      
                        print("LEN DECK:",len(card_Deck))
                    elif turn == True:
                         user_finished_game = True
                    else:
                        print("NOT YOUR TURN")
+                       print("COMP REAL SCORE:",comp_score)
+                       print("COMP FALSE SCORE:",comp_temp_score)
+                       print("LEN OF CARDS_TAKEN:",len(comp_cards_taken))
                        print("USER_SCORE:",user_score)
                        print("comp_score",comp_score)
                        card_print()
@@ -1001,14 +1046,18 @@ while True:
     Screen.blit(text_user_score,(1000,550))
     Screen.blit(text_comp_score,(1000,100))
     computer_move_on_comp_turn()
-    if comp_score < 30 and user_finished_game == False:
+    
+    if  user_finished_game == False and len(card_Deck) > 0 and comp_finished_game() == False:
         user_cards_render(user_cards)
         comp_cards_render(comp_cards)
     elif user_finished_game == True:
         render_win(True)
         game_over_screen = True
-    else:
+    elif comp_finished_game() == True:
         render_win(False)
+        game_over_screen = True
+    else:
+        render_win(True)
         game_over_screen = True
     
     pygame.display.update()
